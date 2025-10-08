@@ -184,13 +184,13 @@ saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/outpu
 
 #### HIGH/LOW
 suffix <- "_rA"# "" # "_rB" # 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_checks.rds") %>%
+ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_check.rds") %>%
   rename(percentage_in = propHigh)
 tmpOut <- outFun(ddOutcomes, suffix)
 saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_H", suffix, "_2020_check.rds")) 
 
 suffix <- "_rA"# "" # "_rB" # 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_checks.rds") %>%
+ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_check.rds") %>%
   rename(percentage_in = propLow)
 tmpOut <- outFun(ddOutcomes, suffix)
 saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_L", suffix, "_2020_check.rds"))

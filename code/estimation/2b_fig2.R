@@ -122,18 +122,8 @@ gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 # rsync -P -e 'ssh -J xtai@hilbert.ucdavis.edu' xtai@fati.ischool.berkeley.edu:/home/xtai/climate/3-8-23migrationCleanCode/output/general/* /Users/xtai/Desktop/seasonalMigration/paper/general
 
-### 9/25/23: plot data 
-#             model        label     estimate        CIlow      CIhigh
-# poppyCatL Overall  Low-growing -0.001503304 -0.006283141 0.003276532
-# poppyCatH Overall High-growing  0.027089737  0.008057100 0.046122374
-
 2*pnorm(tmp[2, 1]/tmp[2, 2], lower.tail = FALSE) # 0.001256662
 
-
-### translate percentage to number of people, as reported in main text
-sum(covariates$TOTAL[covariates$year == 2016 & covariates$poppyCat == "H"])*.0271 # 75321.39
-sum(covariates$TOTAL[covariates$year == 2016 & covariates$poppyCat == "H"])*0.008057100 # 22393.8
-sum(covariates$TOTAL[covariates$year == 2016 & covariates$poppyCat == "H"])*0.046122374 #128191.9
 
 covariates %>% 
   select(distid, TOTAL, poppyCat, year) %>%

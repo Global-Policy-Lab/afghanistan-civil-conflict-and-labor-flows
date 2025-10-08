@@ -98,7 +98,7 @@ tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity)
 fit2coefs <- lmtest::coeftest(new3, vcov. = sandwich::vcovCL(new3, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
 
-keepNames <- c("poppyCatH", "violence", "poppyCatH:violence", "taliban", "poppyCatH:taliban", "poppyCatH:violence:taliban")
+keepNames <- c("poppyCatH", "violence", "poppyCatH:violence", "taliban", "poppyCatH:taliban", "violence:taliban", "poppyCatH:violence:taliban")
 # keepNames <- c("poppyCatL", "violence", "poppyCatL:violence", "taliban", "poppyCatL:taliban", "poppyCatL:violence:taliban")
 estimates <- fit2coefs[keepNames, "Estimate"] # keeps the order of names too 
 # clusteredVcov <- sandwich::vcovCL(new3, cluster = new3$model$`as.factor(prov)`, type = "HC1")
@@ -125,10 +125,10 @@ outDTF <- data.frame(model = rep("High-growing", 4),
                      CIlow = NA,
                      CIhigh = NA)
 
-vecs <- list(c(1, 0, 0, 0, 0, 0),
-             c(1, 1, 1, 0, 0, 0),
-             c(1, 0, 0, 1, 1, 0),
-             c(1, 1, 1, 1, 1, 1))
+vecs <- list(c(1, 0, 0, 0, 0, 0, 0),
+             c(1, 1, 1, 0, 0, 0, 0),
+             c(1, 0, 0, 1, 1, 0, 0),
+             c(1, 1, 1, 1, 1, 1, 1))
 for (i in 1:4) {
   tmp <- getCI(myVec = vecs[[i]], estimates = estimates, vCov = clusteredVcov)
   outDTF[i, "estimate"] <- tmp$estimate
@@ -180,90 +180,11 @@ gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 # rsync -P -e 'ssh -J xtai@hilbert.ucdavis.edu' xtai@fati.ischool.berkeley.edu:/home/xtai/climate/3-8-23migrationCleanCode/output/general/* /Users/xtai/Desktop/seasonalMigration/paper/general
 
-### 10/15/23
-#          model                 label    estimate        CIlow     CIhigh
-# 1 High-growing Violence N, Taliban N 0.009800947 -0.006935413 0.02653731
-# 2 High-growing Violence Y, Taliban N 0.008594161 -0.007304609 0.02449293
-# 3 High-growing Violence N, Taliban Y 0.041531303  0.009666228 0.07339638
-# 4 High-growing Violence Y, Taliban Y 0.040763568  0.020022173 0.06150496
-
 outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
 
-### check significance of coefficients
-diffDTF <- data.frame(model = rep("High-growing", 2), 
-                     label = c("Violence N", "Violence Y"),
-                     estimate = NA,
-                     CIlow = NA,
-                     CIhigh = NA,
-                     variance = NA)
+#          model                 label    estimate        CIlow     CIhigh     variance            p
+# 1 High-growing Violence N, Taliban N 0.009800947 -0.006935413 0.02653731 7.291650e-05 0.2510632428
+# 2 High-growing Violence Y, Taliban N 0.008594161 -0.007304609 0.02449293 6.580075e-05 0.2893864488
+# 3 High-growing Violence N, Taliban Y 0.041531303  0.009666228 0.07339638 2.643222e-04 0.0106335407
+# 4 High-growing Violence Y, Taliban Y 0.033540215  0.014161149 0.05291928 9.776187e-05 0.0006933451
 
-vecs <- list(c(0, 0, 0, 1, 1, 0), # violence N, diff between Taliban Y and N
-             c(0, 0, 0, 1, 1, 1)) # violence Y, diff between Taliban Y and N
-
-vecs <- list(c(0, 1, 1, 0, 0, 0), # Taliban N, diff between violence Y and N
-             c(0, 1, 1, 0, 0, 1)) # Taliban Y, diff between violence Y and N
-for (i in 1:2) {
-  tmp <- getCI(myVec = vecs[[i]], estimates = estimates, vCov = clusteredVcov)
-  diffDTF[i, "estimate"] <- tmp$estimate
-  diffDTF[i, "CIlow"] <- tmp$ciLow
-  diffDTF[i, "CIhigh"] <- tmp$ciHigh
-  diffDTF[i, "variance"] <- tmp$variance
-}
-
-diffDTF
-#          model      label   estimate         CIlow     CIhigh     variance
-# 1 High-growing Violence N 0.03173036 -0.0008694806 0.06433019 0.0002766525
-# 2 High-growing Violence Y 0.03216941  0.0098042272 0.05453459 0.0001302113
-
-# p-value
-2*pnorm(diffDTF$estimate[1]/sqrt(diffDTF$variance[1]), lower.tail = FALSE) # 0.0564314
-2*pnorm(diffDTF$estimate[2]/sqrt(diffDTF$variance[2]), lower.tail = FALSE) # 0.004815045
-
-################# 12/14/23: Figure S6
-# different definitions of violence: more than two events --- need to change x-axis limits
-plot4 <- outDTF %>%
-  mutate(label = paste0(4:1, label)) %>%
-  ggplot(aes(label, estimate))+
-  geom_pointrange(aes(ymin = CIlow, ymax = CIhigh),
-                  color = c("orange", "#fde725", "#1f968b", "#55c667")
-  ) + # fatten changes the circles only; size changes bars and legend circles
-  theme_classic() + 
-  geom_hline(yintercept = 0, colour = "grey60", linetype = 2) + 
-  guides(color = guide_legend(override.aes = list(linetype = "blank")), 
-         linetype = FALSE # suppress line for first plot; only do color
-  ) +  # shape for the type of dot
-  theme(plot.title = element_text(size = 15, face = "bold"),
-        axis.text = element_text(size=14),
-        axis.title = element_text(size=14),
-  ) +
-  labs(
-    # title = "Violence definition: more than 2 events",
-    # title = "Violence definition: 10+ casualties",
-    title = "Violence definition: > 2 events and 10+ casualties",
-    y = "Increase in in-migration from baseline during harvest",
-    x = ""
-  ) +
-  labs(tag = "Taliban = No \n\n\n\n\n Taliban = Yes") +
-  # labs(tag = "Violence = Yes \n\n\n\n\n Violence = No") +
-  theme(plot.tag.position = c(-.07, .57),
-        text = element_text(size = 12),
-        plot.margin = theme_get()$plot.margin + unit(c(0, 0, 0, 3), "cm")
-  ) +
-  coord_flip(clip = "off"
-             # , ylim = c(-.02, 0.08) # CHANGE this line: plot2
-             , ylim = c(-.02, 0.1) # CHANGE this line 
-  ) +
-  annotate(x = 2.5, xend = 2.5, y = -.063, yend = .1,
-           geom = "segment",
-           colour = "#a8a5a5", size = 1.4, alpha = .4) +
-  # geom_vline(xintercept = 2.5, colour = "grey60", linetype = 2) +
-  scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
-# scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
-
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-24-23fig3b.pdf"), width = 8, height = 3)
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/12-14-23fig3b_violenceDef.pdf"), width = 8, height = 3)
-gridExtra::grid.arrange(plot1, nrow = 1)
-gridExtra::grid.arrange(plot2, nrow = 1)
-gridExtra::grid.arrange(plot3, nrow = 1)
-gridExtra::grid.arrange(plot4, nrow = 1)
-dev.off()
