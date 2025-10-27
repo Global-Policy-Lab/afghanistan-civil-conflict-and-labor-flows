@@ -154,7 +154,7 @@ saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1
 
 
 ########### 4/25/23: violence H_Taliban
-# outFun is defined in 7b_overallAndViolenceResults.R
+# outFun is defined in 1d_makeRegPanel.R #7b_overallAndViolenceResults.R
 # ***source results use _rA version***
 
 ### NOTE: these produce warnings(): In summary.lm(fit0) : essentially perfect fit: summary may be unreliable

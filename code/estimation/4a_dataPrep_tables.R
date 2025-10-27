@@ -54,7 +54,7 @@ for (i in 2014:2020) {
 saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24ddOutcomes_goes_back_90.rds")
 
 ####### Part 2: excess daily in-migration 
-# runReg() and outFun() functions in 7b_overallAnd...
+# runReg() and outFun() functions in 1d_makeRegPanel.R # 7b_overallAnd...
 rm(list = ls()); gc()
 suffix <- "" # "_rB" # "_rA"
 # suffix <- "_rA"

@@ -211,18 +211,58 @@ fit11$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$dive
 
 ####################### 1/23/24 new version of returns ####################### 
 # aside: this is the calculation in the paper that 62% of seasonal migrants go back
+ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24ddOutcomes_goes_back_90.rds") 
+
+bestDatesLongTmp <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+  rename("distID" = "distIDs") %>%
+  dplyr::select(distID, year, maxDate) %>%
+  mutate(currentMonth = lubridate::floor_date(as.Date(maxDate), "month")) %>%
+  mutate(maxDate = as.Date(maxDate))
+
+baseline <- ddOutcomes %>%
+  mutate(year = lubridate::year(date),
+         month = lubridate::month(date)) %>%
+  mutate(year = ifelse(month >= 9, year + 1, year)) %>%
+  left_join(bestDatesLongTmp %>%
+              dplyr::select(distID, year, maxDate) %>%
+              filter(year != 2017)
+            ,
+            by = c("district_id" = "distID", "year")) %>%
+  mutate(daysFromPeak = as.numeric(date - maxDate)) %>%
+  dplyr::select(district_id, year, percentage_in, daysFromPeak) %>%
+  filter(daysFromPeak %in% -120:-31) %>%
+  filter(!is.na(percentage_in) & percentage_in != 0 & percentage_in != 1) %>%
+  group_by(district_id, year) %>%
+  summarize(numObs = n(),
+            baseline = mean(percentage_in)) 
+### NOTE: this does not filter by numObs like regs do 
+
+### this is just for the data frame setup
+outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
+covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+  dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
+
+outDTFM4 <- covariates %>%
+  left_join(outcome1, by = c("distid", "year")) %>%
+  mutate(prov = floor(distid/100)) %>%
+  filter(!is.na(maxIn)) 
+
+outDTFM4 <- outDTFM4 %>%
+  left_join(baseline, by = c("distid" = "district_id", "year"))
+
+#### baseline percentage in-migrants that went back 
+median(outDTFM4$baseline[outDTFM4$poppyCat == "H"])
+# 0.4619544
+
 # Coefficients:
 #                                 Estimate Std. Error t value Pr(>|t|)    
 # (Intercept)                    2.267e-01  1.149e-01   1.973 0.048726 *  
 # poppyCatL                      1.583e-02  8.442e-03   1.876 0.060940 .  
 # poppyCatH                      6.698e-02  1.378e-02   4.860 1.32e-06 ***
 
-#### baseline percentage in-migrants that went back 
-# median(outDTFM4$baseline[outDTFM4$poppyCat == "H"])
-# 0.4619544
-
 (0.4619544+6.698e-02)*(0.0361361+.0271)-(0.4619544)*(0.0361361) # 0.01675452
 0.01675452/.0271 # 62% of new in-migrants go back 
+# 0.0361361 is median(outDTFM4$baseline[outDTFM4$poppyCat == "H"])) and .0271 is high coef for main reg
 
 ##############################################################################
 
