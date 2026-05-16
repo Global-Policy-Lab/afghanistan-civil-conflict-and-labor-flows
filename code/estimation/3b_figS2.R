@@ -105,24 +105,6 @@ dev.off()
 afghanShape <- sf::st_read("/data/afg_satellite/shp/district398/district398.shp", quiet = TRUE) %>% 
   sf::st_transform(crs = 32642)
 
-tmp <- afghanShape %>%
-  sf::st_centroid() %>%
-  sf::st_coordinates()
-
-pdf("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/agrTimelineViz.pdf", width = 6, height = 5)
-afghanShape %>%
-  bind_cols(tmp) %>%
-  mutate(X = ifelse(DISTID %in% topDistIDs, X, NA)) %>%
-  ggplot() + 
-  # theme_void() +
-  geom_sf() +
-  geom_text(aes(label = DISTID, x = X, y = Y),
-            size = 2,
-            fontface = "bold") +
-  labs(x = "", y = "")
-dev.off()
-
-
 pdf("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/agrTimelineViz_blank.pdf", width = 6, height = 5)
 afghanShape %>%
   # bind_cols(tmp) %>%
