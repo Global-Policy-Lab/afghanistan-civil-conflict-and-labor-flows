@@ -194,7 +194,7 @@ plot2 <- outDTFM4 %>%
   ) +
   guides(fill = guide_legend(override.aes = list(alpha = 1))) 
 
-pdf(paste0("fig2d.pdf"), width = 8, height = 7)
+pdf(paste0("fig2c.pdf"), width = 8, height = 7)
 gridExtra::grid.arrange(plot1, plot2, nrow = 2)
 dev.off()
 
@@ -243,7 +243,7 @@ plot1 <- plotDTF %>%
     x = "",
   ) 
 
-pdf(paste0("fig2c.pdf"), width = 6.5, height = 1.5)
+pdf(paste0("fig2d.pdf"), width = 6.5, height = 1.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
