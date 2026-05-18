@@ -2,7 +2,7 @@
 
 This repository contains code and data necessary to replicate the findings of the paper:
 
-Xiao Hui Tai, Suraj R. Nair, Shikhar Mehra, and Joshua E. Blumenstock. Satellite and Mobile Phone Data Reveal How Violence Affects Seasonal Migration in Afghanistan (Mar 2024 Draft).
+Xiao Hui Tai, Suraj R. Nair, Shikhar Mehra, and Joshua E. Blumenstock. Satellite and Mobile Phone Data Reveal How Violence Affects Seasonal Migration in Afghanistan.
 
 This work is licensed under the Apache License, Version 2.0.
 
@@ -16,12 +16,8 @@ However, all the code required to process the data and produce the results are i
 - `estimation`: code to create the analysis data set and produce all results
 
 # Demo
-The `demo` folder contains a demonstration of how to run the code and produce the figures in the paper. Small sample data sets are provided and can be downloaded and run by any user. Simply run each of the following R scripts to load the data and produce the corresponding figures. Note that many of the data sets provided are subsets of the original data (and indicated as such in the code) and so the figures produced are only for illustrative purposes.
+The `demo` folder is a self-contained folder that users can run to produce all the figures and tables in the paper. Sample data sets are provided where original data cannot be released, and are indicated as such in the code. Simply run the R scripts corresponding to the figure or table number to load the data and produce the corresponding figures and tables. 
 
-- `fig2.R`
-- `fig3.R`
-- `fig4.R`
-- `fig5.R`
 
 # System requirements 
 (to do)  

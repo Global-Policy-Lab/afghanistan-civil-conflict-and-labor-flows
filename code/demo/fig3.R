@@ -2,7 +2,7 @@
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 
-demoData <- readRDS("./data/fig3Demo.rds") # note that this is a subset of the original data
+demoData <- readRDS("./data/fig3Demo.rds") # note that this is a subset of the original data with 400 obs
 # (contains in-migration outcome + covariates)
 newViolence <- readRDS("./data/6-5-23violenceDest_2020.rds")
 

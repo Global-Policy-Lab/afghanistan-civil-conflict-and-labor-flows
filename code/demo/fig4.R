@@ -70,7 +70,7 @@ dev.off()
 ################## fig 4b
 rm(list = ls()); gc()
 
-outDTFM4 <- readRDS("./data/fig4bcDemo_high.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4bcDemo_high.rds") # note that this is a subset of the original data with 280 obs 
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -85,7 +85,7 @@ fit1 <- lm(maxIn ~ poppyCat + log(areakm2) +
 tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity) & !is.na(outDTFM4$trackPathFrac)]
 fit1coefs <- lmtest::coeftest(fit1, vcov. = sandwich::vcovCL(fit1, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
-outDTFM4 <- readRDS("./data/fig4bcDemo_low.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4bcDemo_low.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit2 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -158,7 +158,7 @@ dev.off()
 ###### source results (fig 4c)
 # violence H T
 rm(list = ls()); gc()
-outDTFM4 <- readRDS("./data/fig4cDemo_HVT.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4cDemo_HVT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -177,7 +177,7 @@ tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity)
 fit1coefs <- lmtest::coeftest(fit1, vcov. = sandwich::vcovCL(fit1, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_V_NonT.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4cDemo_H_V_NonT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit2 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -197,7 +197,7 @@ fit2coefs <- lmtest::coeftest(fit2, vcov. = sandwich::vcovCL(fit2, cluster = as.
 
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_T.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_T.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit3 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -213,7 +213,7 @@ tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity)
 fit3coefs <- lmtest::coeftest(fit3, vcov. = sandwich::vcovCL(fit3, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_NonT.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_NonT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit4 <- lm(maxIn ~ poppyCat + log(areakm2) + 

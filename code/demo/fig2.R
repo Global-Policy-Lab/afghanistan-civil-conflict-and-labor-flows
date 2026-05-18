@@ -4,7 +4,7 @@ library(dplyr); library(ggplot2)
 ############### fig 2a ###############
 rm(list = ls()); gc()
 setwd("./demo")
-outDTF <- readRDS("./data/fig2aDemo.rds") # note that this is a subset of the original data
+outDTF <- readRDS("./data/fig2aDemo.rds") # note that this is a subset of the original data with 10000 obs
 distYears <- readRDS("./data/6-5-23distYearsIncluded_2020.rds") # for missing data handling
 
 forPlot <- outDTF %>%
@@ -52,7 +52,7 @@ forPlot %>%
 dev.off()
 
 ############### fig 2b ###############
-outDTF <- readRDS("./data/fig2bDemo.rds") # note that this is a subset of the original data
+outDTF <- readRDS("./data/fig2bDemo.rds") # note that this is a subset of the original data with 10000 obs
 forPlot <- outDTF %>%
   mutate(distidYear = paste0(distid, "_", year)) %>% # new for missing data
   filter(distidYear %in% distYears) %>% # new for missing data
@@ -202,7 +202,7 @@ dev.off()
 
 ############### fig 2d ###############
 rm(list = ls()); gc()
-outDTFM4 <- readRDS("./data/fig2dDemo.rds") # note that this is a subset of the original data
+outDTFM4 <- readRDS("./data/fig2dDemo.rds") # note that this is a subset of the original data with 120 obs
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 

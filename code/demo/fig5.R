@@ -4,7 +4,7 @@ rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
 # first check if eradication happens in districts with Taliban control or not 
 
-demoData <- readRDS("./data/fig3Demo.rds")  # note that this is a subset of the original data
+demoData <- readRDS("./data/fig3Demo.rds")  # note that this is a subset of the original data with 400 obs
 # in-migration outcome + covariates
 covariates <- readRDS("./data/covariates.rds")
 
