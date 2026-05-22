@@ -1,18 +1,19 @@
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
+source("config.R")
 
 ### covariates of interest: areakm2, nonPoppy (agHectares - poppy), TOTAL
 # new variables to add:
 # 2. area
 # 3. agricultural area
-# 4. derived vars: population density, cultivation density, fraction of poppy/agricultural areas 
+# 4. derived vars: population density, cultivation density, fraction of poppy/agricultural areas
 
-#### input data sets 
-districtInfo <- readRDS("/data/afg_anon/displacement_analysis/district_ids_with_info.rds")
-unodcData <- read.csv("/home/xtai/climate/data/poppy_1994-2020.csv")
-agHectaresLong <- readRDS("/home/xtai/climate/data/7-14-22agHectares.rds")
-load("/data/afg_satellite/xtai/afghanShapeAllInfo.Rdata")
-agrPixels <- readRDS("/home/xtai/tmp/agrPixels.Rds") %>% # this has areakm2 that is calculated using sf (see screenshot) 
+#### input data sets
+districtInfo <- readRDS(DISTRICT_IDS)
+unodcData <- read.csv(POPPY_CSV)
+agHectaresLong <- readRDS(AG_HECTARES_RDS)
+load(AFG_SHAPE_DATA)
+agrPixels <- readRDS(AGR_PIXELS) %>% # this has areakm2 that is calculated using sf (see screenshot) 
   select(DISTID, areakm2)
 
 
@@ -62,14 +63,14 @@ covariates <- covariates %>%
 
 covariates$poppyCat <- factor(covariates$poppyCat, levels = c("N", "L", "H"))
 
-sigarControl <- read.csv("/data/afg_anon/displacement_analysis/SIGARcontrol.csv") %>%
+sigarControl <- read.csv(SIGAR_CSV) %>%
   mutate(talibanConInf = ifelse(Oct.2017.Assessment %in% c("INS Control", "INS In!uence"), 1, 0),
          notGovt = ifelse(Oct.2017.Assessment %in% c("INS Control", "INS In!uence", "Contested"), 1, 0))
 
 covariates <- covariates %>%
   left_join(sigarControl %>%
               select(distid, notGovt, talibanConInf))
-saveRDS(covariates, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds")
+saveRDS(covariates, file = COVARIATES_RDS)
 
 
 

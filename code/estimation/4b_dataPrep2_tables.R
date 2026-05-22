@@ -3,12 +3,13 @@
 
 rm(list=ls()); gc()
 library(dplyr); library(ggplot2)
+source("config.R")
 
-# fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/") 
-fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/") 
+# fileList <- list.files(CDR_K15_DIR) 
+fileList <- list.files(CDR_K45_DIR) 
 
-# tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/", fileList[1]))
-tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/", fileList[1]))
+# tmpFile <- read.csv(file.path(CDR_K15_DIR, fileList[1]))
+tmpFile <- read.csv(file.path(CDR_K45_DIR, fileList[1]))
 
 outData <- tmpFile %>%
   group_by(destination_district, visit_day) %>% # now aggregate
@@ -21,8 +22,8 @@ options(dplyr.summarise.inform = FALSE)
 Sys.time()
 for (i in 2:length(fileList)) {
   if (i %% 200 == 0) cat(i, ", ")
-  # tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/", fileList[i]))
-  tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/", fileList[i]))
+  # tmpFile <- read.csv(file.path(CDR_K15_DIR, fileList[i]))
+  tmpFile <- read.csv(file.path(CDR_K45_DIR, fileList[i]))
   
   tmpData <- tmpFile %>%
     group_by(destination_district, visit_day) %>% # now aggregate
@@ -38,22 +39,22 @@ Sys.time()
 
 outData <- outData %>%
   mutate(date = as.Date("2013-04-01") + lubridate::days(visit_day - 1)) 
-# saveRDS(outData, file = "/home/xtai/climate/data/k15_inMigration_homeDetector_2020.rds")
-saveRDS(outData, file = "/home/xtai/climate/data/k45_inMigration_homeDetector_2020.rds")
+# saveRDS(outData, file = K15_INMIG_RDS)
+saveRDS(outData, file = K45_INMIG_RDS)
 
 ################## impacted: 
-# fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/")
-# tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/", fileList[1]))
-fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/")
-tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/", fileList[1]))
+# fileList <- list.files(CDR_K15_DIR)
+# tmpFile <- read.csv(file.path(CDR_K15_DIR, fileList[1]))
+fileList <- list.files(CDR_K45_DIR)
+tmpFile <- read.csv(file.path(CDR_K45_DIR, fileList[1]))
 getImpacted <- tmpFile %>%
   distinct(origin_district, impact_day, impacted)
 
 Sys.time()
 for (i in 2:length(fileList)) {
   if (i %% 200 == 0) cat(i, ", ")
-  # tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_15_days/", fileList[i]))
-  tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_45_days/", fileList[i]))
+  # tmpFile <- read.csv(file.path(CDR_K15_DIR, fileList[i]))
+  tmpFile <- read.csv(file.path(CDR_K45_DIR, fileList[i]))
   tmpData <- tmpFile %>%
     distinct(origin_district, impact_day, impacted)
   getImpacted <- getImpacted %>%
@@ -61,14 +62,14 @@ for (i in 2:length(fileList)) {
 }
 Sys.time()
 
-# saveRDS(getImpacted, file = "/home/xtai/climate/data/impacted_homeDetector_2020_k15.rds")
-saveRDS(getImpacted, file = "/home/xtai/climate/data/impacted_homeDetector_2020_k45.rds")
+# saveRDS(getImpacted, file = K15_IMPACTED_RDS)
+saveRDS(getImpacted, file = K45_IMPACTED_RDS)
 # 10 minutes  
 
 ####################################################################################
 rm(list=ls()); gc()
 #### harvest dates
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   # select(-pctPoppy, -modeSecond) %>%
   # select(-pctPoppy) %>%
@@ -84,11 +85,11 @@ bestDatesWide <- bestDatesLong %>%
 
 
 ### for in-migration
-# outData <- readRDS("/home/xtai/climate/data/k15_inMigration_homeDetector_2020.rds")
-outData <- readRDS("/home/xtai/climate/data/k45_inMigration_homeDetector_2020.rds")
+# outData <- readRDS(K15_INMIG_RDS)
+outData <- readRDS(K45_INMIG_RDS)
 
-getImpacted <- readRDS("/home/xtai/climate/data/impacted_homeDetector_2020_k45.rds") %>% # 581478 rows
-# getImpacted <- readRDS("/home/xtai/climate/data/impacted_homeDetector_2020_k15.rds") %>% # 581478 rows
+getImpacted <- readRDS(K45_IMPACTED_RDS) %>% # 581478 rows
+# getImpacted <- readRDS(K15_IMPACTED_RDS) %>% # 581478 rows
   rename(district_id = origin_district) %>%
   mutate(date = as.Date("2013-04-01") + lubridate::days(impact_day - 1)) %>%
   select(-impact_day)
@@ -118,8 +119,8 @@ for (i in 2014:2020) {
                                                  1, 0)
 }
 
-# saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24ddOutcomes_2020_k15.rds") 
-saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24ddOutcomes_2020_k45.rds") 
+# saveRDS(ddOutcomes, file = DD_OUTCOMES_K15_RDS) 
+saveRDS(ddOutcomes, file = DD_OUTCOMES_K45_RDS) 
 
 ###### now code from 7b
 ########################## start here ##########################
@@ -270,11 +271,11 @@ outFun <- function(ddOutcomes, suffix) {
 #########
 ### NOTE WHEN DOING FOR OUT-MIGRATION: need to manually change two lines in outFun() and runReg()
 suffix <- "" # "_rB" # "_rA"
-# ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24ddOutcomes_2020_k15.rds")
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24ddOutcomes_2020_k45.rds")
+# ddOutcomes <- readRDS(DD_OUTCOMES_K15_RDS)
+ddOutcomes <- readRDS(DD_OUTCOMES_K45_RDS)
 tmpOut <- outFun(ddOutcomes, suffix)
-# saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24results_inMigration_2020_k15.rds")
-saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24results_inMigration_2020_k45.rds")
+# saveRDS(tmpOut, file = RESULTS_INMIG_K15_RDS)
+saveRDS(tmpOut, file = RESULTS_INMIG_K45_RDS)
 
 ########################
 rm(list=ls()); gc()
@@ -282,8 +283,8 @@ library(ggplot2); library(dplyr)
 
 #####################################
 
-# outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24results_inMigration_2020_k15.rds")
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24results_inMigration_2020_k45.rds")
+# outDTF <- readRDS(RESULTS_INMIG_K15_RDS)
+outDTF <- readRDS(RESULTS_INMIG_K45_RDS)
 
 #################  Part 3: make excess harvest in-migration 
 distIDs <- unique(outDTF$distid)
@@ -320,5 +321,5 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
     }
   }
 }
-# saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24inMigRegOutcome_2020_k15.rds")
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24inMigRegOutcome_2020_k45.rds")
+# saveRDS(newResponse, file = OUTCOME_K15_RDS)
+saveRDS(newResponse, file = OUTCOME_K45_RDS)

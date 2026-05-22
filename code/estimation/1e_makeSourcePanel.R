@@ -2,19 +2,20 @@
 # this file preps source
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
+source("config.R")
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>% # has poppyCat from years 2014 to 2020 by district 
+covariates <- readRDS(COVARIATES_RDS) %>% # has poppyCat from years 2014 to 2020 by district 
   select(-geometry)
 
 ###### 4/25/23: H, taliban and violence
-sigarControl <- read.csv("/data/afg_anon/displacement_analysis/SIGARcontrol.csv") %>%
+sigarControl <- read.csv(SIGAR_CSV) %>%
   mutate(talibanConInf = ifelse(Oct.2017.Assessment %in% c("INS Control", "INS In!uence"), 1, 0),
          notGovt = ifelse(Oct.2017.Assessment %in% c("INS Control", "INS In!uence", "Contested"), 1, 0))
 
 #### violence at source
 # need to make conflict data in the form
 # distid, date (floor month), violenceBinary
-conflictData <- read.csv("/data/afg_satellite/Conflict_district.csv")
+conflictData <- read.csv(CONFLICT_CSV)
 conflictDataSub <- conflictData %>%
   filter(year %in% 2013:2020 & where_prec <= 3 & date_prec <= 3) %>% # change from 2020 to 2017 to limit computation
   select(DISTID, date_start) %>%
@@ -46,11 +47,11 @@ outLong <- out %>%
 outLong$date <- as.Date(outLong$date, origin = "1970-01-01")
 outLong$violence <- 1
 
-fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_30_days/")
+fileList <- list.files(CDR_K30_DIR)
 
 sourceFun <- function(fileName) {
   # first fix the data issues 
-  tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_30_days/", fileName))
+  tmpFile <- read.csv(file.path(CDR_K30_DIR, fileName))
   if (nrow(tmpFile) != 398*398) {
     stop(paste0(fileName, ": wrong number of rows"))
   }
@@ -124,7 +125,7 @@ k30data <- k30data %>%
 
 
 #### harvest dates
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "date" = "maxDate")
@@ -148,7 +149,7 @@ for (i in 2014:2020) {
                                                  1, 0)
 }
 
-saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds")
+saveRDS(ddOutcomes, file = DD_OUTCOMES_VIOLENCE_RDS)
 
 saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1-8-24ddOutcomes_violence_L_T_2020.rds")
 
@@ -160,40 +161,40 @@ saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1
 ### NOTE: these produce warnings(): In summary.lm(fit0) : essentially perfect fit: summary may be unreliable
 
 suffix <- "_rA"# "" # "_rB" # 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS) %>%
   rename(percentage_in = propHighV_Taliban)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_V_T", suffix, "_2020.rds"))
+saveRDS(tmpOut, file = paste0(RESULTS_HVT_BASE, suffix, "_2020.rds"))
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS) %>%
   rename(percentage_in = propHighV_NonTaliban)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_V_NonT", suffix, "_2020.rds"))
+saveRDS(tmpOut, file = paste0(RESULTS_HVNONT_BASE, suffix, "_2020.rds"))
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS) %>%
   rename(percentage_in = propHighNonV_Taliban)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_NonV_T", suffix, "_2020.rds"))
+saveRDS(tmpOut, file = paste0(RESULTS_HNONVT_BASE, suffix, "_2020.rds"))
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS) %>%
   rename(percentage_in = propHighNonV_NonTaliban)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_NonV_NonT", suffix, "_2020.rds"))
+saveRDS(tmpOut, file = paste0(RESULTS_HNONVNONT_BASE, suffix, "_2020.rds"))
 # then go to 4a_sourceFigsRegs.R
 
 
 #### HIGH/LOW
 suffix <- "_rA"# "" # "_rB" # 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_check.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_CHECK_RDS) %>%
   rename(percentage_in = propHigh)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_H", suffix, "_2020_check.rds")) 
+saveRDS(tmpOut, file = paste0(RESULTS_H_CHECK_BASE, suffix, "_2020_check.rds")) 
 
 suffix <- "_rA"# "" # "_rB" # 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_check.rds") %>%
+ddOutcomes <- readRDS(DD_OUTCOMES_CHECK_RDS) %>%
   rename(percentage_in = propLow)
 tmpOut <- outFun(ddOutcomes, suffix)
-saveRDS(tmpOut, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_L", suffix, "_2020_check.rds"))
+saveRDS(tmpOut, file = paste0(RESULTS_L_CHECK_BASE, suffix, "_2020_check.rds"))
 
 
 ################# violence H T # this code from 4a
@@ -236,14 +237,14 @@ tmpFun <- function(outDTF) {
   return(newResponse)
 }
 suffix <- "_rA"#  ""  # "_rB"#  
-out1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_V_T", suffix, "_2020.rds"))
-out2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_V_NonT", suffix, "_2020.rds"))
-out3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_NonV_T", suffix, "_2020.rds"))
-out4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_H_NonV_NonT", suffix, "_2020.rds"))
-outFiles <- c(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds"),
-              paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds"),
-              paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds"),
-              paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds"))
+out1 <- readRDS(paste0(RESULTS_HVT_BASE, suffix, "_2020.rds"))
+out2 <- readRDS(paste0(RESULTS_HVNONT_BASE, suffix, "_2020.rds"))
+out3 <- readRDS(paste0(RESULTS_HNONVT_BASE, suffix, "_2020.rds"))
+out4 <- readRDS(paste0(RESULTS_HNONVNONT_BASE, suffix, "_2020.rds"))
+outFiles <- c(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds"),
+              paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds"),
+              paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds"),
+              paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds"))
 for (i in 1:4) {
   cat(i, ", ")
   newResponse <- tmpFun(get(paste0("out", i)))
@@ -253,10 +254,10 @@ for (i in 1:4) {
 
 # high/low
 suffix <- "_rA"#  ""  # "_rB"#  
-out1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_H", suffix, "_2020_check.rds"))
-out2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_L", suffix, "_2020_check.rds"))
-outFiles <- c(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23H", suffix, "_2020_check.rds"),
-              paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23L", suffix, "_2020_check.rds"))
+out1 <- readRDS(paste0(RESULTS_H_CHECK_BASE, suffix, "_2020_check.rds"))
+out2 <- readRDS(paste0(RESULTS_L_CHECK_BASE, suffix, "_2020_check.rds"))
+outFiles <- c(paste0(SUBGROUP_H_CHECK_BASE, suffix, "_2020_check.rds"),
+              paste0(SUBGROUP_L_CHECK_BASE, suffix, "_2020_check.rds"))
 for (i in 1:2) {
   cat(i, ", ")
   newResponse <- tmpFun(get(paste0("out", i)))

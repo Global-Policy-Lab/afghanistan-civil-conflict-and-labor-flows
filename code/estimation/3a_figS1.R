@@ -4,9 +4,10 @@ library(sf)
 library(dplyr)
 library(ggplot2)
 
-load("/data/afg_satellite/xtai/afghanShapeAllInfo.Rdata")
+source("config.R")
+load(AFG_SHAPE_DATA)
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)
 
 afghanShape <- afghanShape %>%
@@ -16,7 +17,7 @@ afghanShape <- afghanShape %>%
             by = c("DISTID" = "distid"))
 ################### tower groups 
 # /data/afg_anon/tower_datasets/tower_groups/v2020/towers_with_group_id.csv
-towerGroups <- read.csv("/data/afg_anon/tower_datasets/tower_groups/v2020/tower_groups.csv")
+towerGroups <- read.csv(TOWER_GROUPS)
 # towerGroups <- read.csv("/Users/xtai/Desktop/development/displacementProj/code/data/Final_Aggregated_GroupIDs_UTM42N.csv", stringsAsFactors = FALSE)
 towerGroups <- towerGroups %>%
   filter(tower_group_latitude < 40 & tower_group_longitude > 60.12) 
@@ -27,7 +28,7 @@ sites <- sf::st_as_sf(towerGroups, coords = c("tower_group_longitude", "tower_gr
 
 viridisThreeColor <- c("#fde72566", "#21918c66", "#44015466") # 66 for 40% transparency
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-13-23map.pdf"), width = 8, height = 5)
+pdf(file.path(OUT_GENERAL, "10-13-23map.pdf"), width = 8, height = 5)
 ggplot() + 
   # theme_void() +
   geom_sf(data = afghanShape, aes(fill = poppyCat)) + # 1/28: remove Kabul

@@ -5,14 +5,14 @@ rm(list=ls()); gc()
 
 ############ fig 
 rm(list = ls()); gc()
-fileList <- system("ls /home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/random/*", intern = TRUE)
-# list.files("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/random/")
+source("config.R")
+fileList <- list.files(RANDOM_DIR, full.names = TRUE)
 
 collectCoefs <- rep(NA, length(fileList))
 for (i in 1:length(collectCoefs)) {
   if (i %% 5 == 0) cat(i, ", ")
   outcome1 <- readRDS(fileList[i])
-  covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+  covariates <- readRDS(COVARIATES_RDS) %>%
     dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
   
   outDTFM4 <- covariates %>%
@@ -33,8 +33,8 @@ for (i in 1:length(collectCoefs)) {
 }
 
 # original:
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -64,7 +64,7 @@ plot1 <- data.frame(randomCoefs = collectCoefs) %>%
   annotate("text", x = .0248, y = 15.3, label = "Observed",
            size = 3) 
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/randomNDVI.pdf"), width = 5.5, height = 4)
+pdf(file.path(OUT_REVIEW1, "randomNDVI.pdf"), width = 5.5, height = 4)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

@@ -2,7 +2,8 @@
 
 
 rm(list = ls()); gc()
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") #%>%
+source("config.R")
+bestDatesLong <- readRDS(BEST_DATES_SAT) #%>%
 # select(distIDs, year, maxDate) %>%
 # rename("distID" = "distIDs",
 #        "date" = "maxDate") %>%
@@ -11,8 +12,8 @@ bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.
 #                    # values_from = "bestDatesM2",
 #                    names_prefix = "year_")
 
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -72,7 +73,7 @@ plotDTF <- plotDTF %>%
             by = c("distid" = "distIDs",
                    "date" = "maxDate"))
 
-pdf("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/agrTimelineDates.pdf", width = 8, height = 4)
+pdf(file.path(OUT_REVIEW1, "agrTimelineDates.pdf"), width = 8, height = 4)
 plotDTF %>%
   mutate(distid = ifelse(distid == 1115, 0, distid)) %>% # hack so that 1115 appears below
   mutate(val = ifelse(is.na(year), 0, 1),
@@ -102,10 +103,10 @@ scale_y_discrete(labels = c("2416" = "Zhari",
 dev.off()
 
 # figure of Afghanistan 
-afghanShape <- sf::st_read("/data/afg_satellite/shp/district398/district398.shp", quiet = TRUE) %>% 
+afghanShape <- sf::st_read(DISTRICT_SHP, quiet = TRUE) %>%
   sf::st_transform(crs = 32642)
 
-pdf("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/agrTimelineViz_blank.pdf", width = 6, height = 5)
+pdf(file.path(OUT_REVIEW1, "agrTimelineViz_blank.pdf"), width = 6, height = 5)
 afghanShape %>%
   # bind_cols(tmp) %>%
   # mutate(X = ifelse(DISTID %in% topDistIDs, X, NA)) %>%

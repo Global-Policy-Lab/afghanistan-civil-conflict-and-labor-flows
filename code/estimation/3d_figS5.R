@@ -2,11 +2,12 @@
 # updated 9/27/23
 rm(list = ls()); gc()
 library(dplyr)
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+source("config.R")
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -18,7 +19,7 @@ outDTFM4 <- covariates %>%
   filter(!is.na(maxIn))
 
 # pdf(paste0("/home/xtai/climate/output/5-6-23twoWayEDA.pdf"), width = 10, height = 4)
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/9-26-23twoWayEDA.pdf"), width = 10, height = 4)
+pdf(file.path(OUT_GENERAL, "9-26-23twoWayEDA.pdf"), width = 10, height = 4)
 plot1 <- ggplot(outDTFM4, aes(x = notGovt, fill = as.factor(violence_monthBefore))) +
   geom_bar() +
   labs(fill = "Violence",

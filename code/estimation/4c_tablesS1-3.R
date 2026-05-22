@@ -2,6 +2,7 @@
 ########################### REGS START HERE ############################
 rm(list = ls()); gc()
 library(stargazer)
+source("config.R")
 # robustness checks:
 # - A. original # fit1
 # - B. continuous poppy # fit2
@@ -27,20 +28,20 @@ library(stargazer)
 # mdls2 <- list(fit5, fit10, fit11) # these are for return of seasonal migrants
 # mdls3 <- list(fitm14, fitp14, fit6, fit7)
 
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-outcome2 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23inMigRegOutcome_1-45_2020.rds")
-outcome3 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23inMigRegOutcome_1-45_14days_2020.rds")
-outcome4 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/10-16-23inMigStaysRegOutcome_2020.rds")
-outcome5 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23inMigGoesBackRegOutcome_2020.rds") # 12/19/23: in migrant goes back
-outcome6 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24inMigGoesBackRegOutcome_90.rds") # 1/23/24: in migrant goes back 
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+outcome2 <- readRDS(OUTCOME_1_45_RDS)
+outcome3 <- readRDS(OUTCOME_1_45_14D_RDS)
+outcome4 <- readRDS(OUTCOME_STAYS_RDS)
+outcome5 <- readRDS(OUTCOME_GOBACK_RDS) # 12/19/23: in migrant goes back
+outcome6 <- readRDS(OUTCOME_GOBACK_90_RDS) # 1/23/24: in migrant goes back 
 
-outcome7 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24inMigRegOutcome_2020_k15.rds")
-outcome8 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/11-14-24inMigRegOutcome_2020_k45.rds")
-outcome9 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/outcome-14days.rds")
-outcome10 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/outcome14days.rds")
+outcome7 <- readRDS(OUTCOME_K15_RDS)
+outcome8 <- readRDS(OUTCOME_K45_RDS)
+outcome9 <- readRDS(OUTCOME_MINUS14_RDS)
+outcome10 <- readRDS(OUTCOME_PLUS14_RDS)
 
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)
 # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
@@ -123,7 +124,7 @@ fit5$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diver
 # lmtest::coeftest(fit5, vcov. = sandwich::vcovCL(fit5, cluster = fit5$model$prov, type = "HC1")) # takes less than a minute!
 
 # restrict data set to district years with prop1 > .5
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") 
+bestDatesLong <- readRDS(BEST_DATES_SAT) 
 sureDYs <- bestDatesLong %>%
   filter(prop1 > .5) %>% 
   # filter(prop1 <= .5) %>%
@@ -211,9 +212,9 @@ fit11$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$dive
 
 ####################### 1/23/24 new version of returns ####################### 
 # aside: this is the calculation in the paper that 62% of seasonal migrants go back
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24ddOutcomes_goes_back_90.rds") 
+ddOutcomes <- readRDS(DD_OUTCOMES_GOBACK_RDS) 
 
-bestDatesLongTmp <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLongTmp <- readRDS(BEST_DATES_SAT) %>%
   rename("distID" = "distIDs") %>%
   dplyr::select(distID, year, maxDate) %>%
   mutate(currentMonth = lubridate::floor_date(as.Date(maxDate), "month")) %>%
@@ -238,8 +239,8 @@ baseline <- ddOutcomes %>%
 ### NOTE: this does not filter by numObs like regs do 
 
 ### this is just for the data frame setup
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%

@@ -2,15 +2,16 @@
 
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
+source("config.R")
 # first check if eradication happens in districts with Taliban control or not 
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-30-23violenceDest.rds")
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_OLD_RDS)
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-eradicationData <- read.csv("/home/xtai/climate/data/eradication_2014-2016.csv")
+eradicationData <- read.csv(ERADICATION_CSV)
 eradicationLong <- eradicationData %>%
   tidyr::pivot_longer(cols = starts_with("X"), 
                       names_to = "year", 
@@ -82,8 +83,8 @@ outDTFM4 <- outDTFM4 %>%
 # sum(outDTFM4$poppyCat == "H" & outDTFM4$notGovt == 1) # 40
 
 ########################## fig 5A ############################
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig5a.pdf"), width = 8, height = 4.5)
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/9-26-23fig5a.pdf"), width = 8, height = 5)
+pdf(file.path(OUT_GENERAL, "1-10-24fig5a.pdf"), width = 8, height = 4.5)
+# pdf(file.path(OUT_GENERAL, "9-26-23fig5a.pdf"), width = 8, height = 5)
 outDTFM4 %>%
   filter(poppyCat == "H") %>%
   filter(eradicationYN == 1) %>%
@@ -218,7 +219,7 @@ plot1 <- outDTF %>%
 2*pnorm(outDTF$estimate[3]/sqrt(outDTF$variance[3]), lower.tail = TRUE) # 0.0477396
 # just reading off summary results: 0.048182
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig6b_2020.pdf"), width = 8, height = 2.8)
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-24-23fig6b_2020.pdf"), width = 8, height = 3)
+pdf(file.path(OUT_GENERAL, "1-10-24fig6b_2020.pdf"), width = 8, height = 2.8)
+# pdf(file.path(OUT_GENERAL, "10-24-23fig6b_2020.pdf"), width = 8, height = 3)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()

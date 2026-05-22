@@ -2,13 +2,14 @@
 ###### source results 
 # violence H T
 rm(list = ls()); gc()
+source("config.R")
 suffix <- "_rA"#  ""  # "_rB"#   # ***source results use _rA version***
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds"))
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds"))
-outcome3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds"))
-outcome4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds"))
+outcome1 <- readRDS(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds"))
+outcome2 <- readRDS(paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds"))
+outcome3 <- readRDS(paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds"))
+outcome4 <- readRDS(paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds"))
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -161,7 +162,7 @@ removeYearCheck <- function(tmpYear) {
   gridExtra::grid.arrange(plot1, nrow = 1)
   
 }
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig4c_robust.pdf"), width = 8, height = 5)
+pdf(file.path(OUT_GENERAL, "1-10-24fig4c_robust.pdf"), width = 8, height = 5)
 for (i in c(2014:2016, 2018:2020)) {
   removeYearCheck(i) 
 }

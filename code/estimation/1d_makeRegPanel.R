@@ -1,6 +1,7 @@
 ########################## start here ##########################
 ##### Part 2 of data prep: excess daily in-migration 
 rm(list=ls()); gc()
+source("config.R")
 # this function has a line that manually needs to be replaced for out-migration 
 runReg <- function(inputDistid, ddOutcomes, suffix) {
   
@@ -146,11 +147,11 @@ outFun <- function(ddOutcomes, suffix) {
 #########
 ### NOTE WHEN DOING FOR OUT-MIGRATION: need to manually change two lines in outFun() and runReg()
 suffix <- "" # "_rB" # "_rA"
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_2020.rds")
+ddOutcomes <- readRDS(DD_OUTCOMES_RDS)
 # ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_out_2020.rds")
 tmpOut <- outFun(ddOutcomes, suffix)
 # tmpOut %>% filter(year == 2015 & distid == 2304) ### NOTE 9/26/23: this district has one day in the baseline period with 0 in-migration, so fewer than 90 days total in baseline and was dropped. Not sure why in previous version it was not dropped. 
-saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_inMigration_2020.rds")
+saveRDS(tmpOut, file = RESULTS_INMIG_RDS)
 # saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_outMigration_2020.rds")
 ### NOTE: out-migration gets some warning messages:
 # 1: In summary.lm(fit0) :
@@ -161,7 +162,7 @@ tmpOut <- tmpOut %>%
   mutate(distidYear = paste0(distid, "_", year)) #%>% # new for missing data
 distYears <- unique(tmpOut$distidYear) # 1420 total
 
-saveRDS(distYears, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23distYearsIncluded_2020.rds") # says 6/5 but updated 7/24
+saveRDS(distYears, file = DIST_YEARS_RDS) # says 6/5 but updated 7/24
 # distYears is used for regs for fig 2
 
 
@@ -172,7 +173,7 @@ library(ggplot2); library(dplyr)
 #####################################
 # distYears <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-29-23distYearsIncluded.rds")
 
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_inMigration_2020.rds")
+outDTF <- readRDS(RESULTS_INMIG_RDS)
 
 #################  Part 3: make excess harvest in-migration 
 distIDs <- unique(outDTF$distid)
@@ -209,7 +210,7 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
     }
   }
 }
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
+saveRDS(newResponse, file = INMIG_OUTCOME_RDS)
 
 
 
@@ -217,7 +218,7 @@ saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/
 rm(list=ls()); gc()
 library(ggplot2); library(dplyr)
 
-results2014 <- readRDS("/home/xtai/climate/output/10-25-22results2014_in_LPM_bestDatesM4_homeDetctor.rds") # just for the names 
+results2014 <- readRDS(LEGACY_RESULTS2014) # just for the names 
 newViolence <- data.frame(distid = as.numeric(sub("dist_", "", names(results2014))), 
                           year = c(rep(2014, length(names(results2014))), 
                                    rep(2015, length(names(results2014))), 
@@ -226,7 +227,7 @@ newViolence <- data.frame(distid = as.numeric(sub("dist_", "", names(results2014
                                    rep(2019, length(names(results2014))), 
                                    rep(2020, length(names(results2014)))))
 
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "peakNDVIdate" = "maxDate")
@@ -237,7 +238,7 @@ newViolence <- newViolence %>%
                    "year")) 
 #####################################
 
-conflictData <- read.csv("/data/afg_satellite/Conflict_district.csv")
+conflictData <- read.csv(CONFLICT_CSV)
 conflictDataSub <- conflictData %>%
   filter(year %in% 2013:2020 & where_prec <= 3 & date_prec <= 3) %>%
   select(DISTID, year, date_start, where_prec, date_prec, best)
@@ -267,5 +268,5 @@ for (i in 1:nrow(newViolence)) {
     newViolence$numCas_monthBeforePeak[i] <- tmp$numCasualties
   }
 }
-saveRDS(newViolence, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+saveRDS(newViolence, file = VIOLENCE_DEST_RDS)
 

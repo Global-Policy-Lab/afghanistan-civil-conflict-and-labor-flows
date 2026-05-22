@@ -2,9 +2,10 @@
 args = commandArgs(trailingOnly = TRUE) 
 ####################### randomization inference #######################
 suppressMessages(library(dplyr))
+source("config.R")
 
 #### harvest dates
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "date" = "maxDate")
@@ -21,7 +22,7 @@ bestDatesWide <- bestDatesLong %>%
                      values_from = "date",
                      names_prefix = "year_")
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_2020.rds") %>% # says 6/5/23 but updated 7/24 after Shikhar fix 
+ddOutcomes <- readRDS(DD_OUTCOMES_RDS) %>% # says 6/5/23 but updated 7/24 after Shikhar fix 
   select(-starts_with("baseline"),
          -starts_with("year"))
 
@@ -84,7 +85,7 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
   }
 }
 
-# saveRDS(newResponse, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/random/random_", sprintf("%02d", numericArg), ".rds"))
-saveRDS(newResponse, file = paste0("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/random/random_", sprintf("%03d", numericArg), ".rds"))
+# saveRDS(newResponse, file = file.path(RANDOM_DIR, paste0("random_", sprintf("%02d", numericArg), ".rds"))
+saveRDS(newResponse, file = file.path(RANDOM_DIR, paste0("random_", sprintf("%03d", numericArg), ".rds"))
 
 # nohup ./randomizationInference.R 2 & 

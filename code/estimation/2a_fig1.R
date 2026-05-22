@@ -1,17 +1,18 @@
 # FIGURE 1c
 rm(list = ls()); gc()
+source("config.R")
 
 #### harvest dates
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "date" = "maxDate")
 
 ##########
 ### for in-migration
-outData <- readRDS("/home/xtai/climate/data/k30_inMigration_homeDetector_2020.rds")
+outData <- readRDS(K30_INMIG_RDS)
 
-getImpacted <- readRDS("/home/xtai/climate/data/impacted_homeDetector_2020.rds") %>% # this is for drop T
+getImpacted <- readRDS(K30_IMPACTED_RDS) %>% # this is for drop T
   rename(district_id = origin_district) %>%
   mutate(date = as.Date("2013-04-01") + lubridate::days(impact_day - 1)) %>%
   select(-impact_day)
@@ -26,7 +27,7 @@ ddOutcomes <- getImpacted %>%
 # select(-numNew)
 
 # out-migration
-ddOutcomesOut <- readRDS("/home/xtai/climate/data/k30_outMigration_homeDetector_2020.rds") %>% 
+ddOutcomesOut <- readRDS(K30_OUTMIG_RDS) %>% 
   ungroup()
 
 ddOutcomes <- ddOutcomes %>% 
@@ -35,13 +36,13 @@ ddOutcomes <- ddOutcomes %>%
             by = c("district_id" = "origin_district", "date"))
 
 ### other setup: district names
-districtInfo <- readRDS("/data/afg_anon/displacement_analysis/district_ids_with_info.rds")
+districtInfo <- readRDS(DISTRICT_IDS)
 districtInfo$provDistName <- paste0(districtInfo$prov_name, "-", districtInfo$dist_name)
 
 distIDs <- unique(ddOutcomes$district_id)
 
 #### other setup: print poppy cultivation amounts 
-unodcData <- read.csv("/home/xtai/climate/data/poppy_1994-2020.csv")
+unodcData <- read.csv(POPPY_CSV)
 # wide to long
 poppyLong <- unodcData %>%
   tidyr::pivot_longer(cols = starts_with("X"), 
@@ -51,7 +52,7 @@ poppyLong <- unodcData %>%
                       values_to = "poppy") %>%
   filter(year %in% 2012:2020)
 
-conflictData <- read.csv("/data/afg_satellite/Conflict_district.csv")
+conflictData <- read.csv(CONFLICT_CSV)
 
 #### just migration lines for presentation 
 inputDist <- 2407
@@ -99,7 +100,7 @@ plot1 <- plot1 +
              aes(x = as.Date(date_start), y = -.01, size = Casualties)) 
 
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23outcomek30ByDistrict_2407_noViolence.pdf"), width = 14, height = 5.5)
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23outcomek30ByDistrict_2407.pdf"), width = 14, height = 5.5)
+pdf(file.path(OUT_GENERAL, "8-1-23outcomek30ByDistrict_2407_noViolence.pdf"), width = 14, height = 5.5)
+# pdf(file.path(OUT_GENERAL, "8-1-23outcomek30ByDistrict_2407.pdf"), width = 14, height = 5.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()

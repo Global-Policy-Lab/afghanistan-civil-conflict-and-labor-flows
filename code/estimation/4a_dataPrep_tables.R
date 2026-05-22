@@ -10,15 +10,16 @@
  
 ####################### ROBUSTNESS CHECK E. in-migrant stays #########################
 rm(list=ls()); gc()
+source("config.R")
 # migStats <- read.csv("/data/afg_satellite/snair/mig_stats_15mar.csv") # superseded
 migStats <- read.csv("/data/afg_satellite/snair/mig_stats_oct15.csv")
 migStats <- read.csv("/data/afg_satellite/snair/mig_stats_dec15.csv") # return migration 
-migStats <- read.csv("/data/afg_satellite/snair/mig_stats_jan20_90.csv") # 
+migStats <- read.csv(MIG_STATS_CSV) # 
 
 
 ################### More prep for in-migration variable ###################
 #### harvest dates
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "date" = "maxDate")
@@ -51,7 +52,7 @@ for (i in 2014:2020) {
 
 # saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23ddOutcomes_stays_2020.rds")
 # saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23ddOutcomes_goes_back_2020.rds")
-saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24ddOutcomes_goes_back_90.rds")
+saveRDS(ddOutcomes, file = DD_OUTCOMES_GOBACK_RDS)
 
 ####### Part 2: excess daily in-migration 
 # runReg() and outFun() functions in 1d_makeRegPanel.R # 7b_overallAnd...
@@ -60,19 +61,19 @@ suffix <- "" # "_rB" # "_rA"
 # suffix <- "_rA"
 # ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23ddOutcomes_stays_2020.rds")
 # ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23ddOutcomes_goes_back_2020.rds")
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24ddOutcomes_goes_back_90.rds")
+ddOutcomes <- readRDS(DD_OUTCOMES_GOBACK_RDS)
 # 12/19/23: goes back 
 tmpOut <- outFun(ddOutcomes, suffix)
 # saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23results_inMigrant_stays_2020.rds")
 # saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23results_inMigrant_goes_back_2020.rds")
-saveRDS(tmpOut, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24results_inMigrant_goes_back_90.rds")
+saveRDS(tmpOut, file = RESULTS_GOBACK_90_RDS)
 
 #### Part 3: excess harvest in-migration 
 rm(list = ls()); gc()
-distYears <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23distYearsIncluded_2020.rds")
+distYears <- readRDS(DIST_YEARS_RDS)
 # outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23results_inMigrant_stays_2020.rds") %>%
 # outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23results_inMigrant_goes_back_2020.rds") %>%
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24results_inMigrant_goes_back_90.rds") %>%
+outDTF <- readRDS(RESULTS_GOBACK_90_RDS) %>%
   mutate(distidYear = paste0(distid, "_", year)) %>%
   filter(distidYear %in% distYears)
 
@@ -112,7 +113,7 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
 }
 # saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/10-16-23inMigStaysRegOutcome_2020.rds")
 # saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/12-19-23inMigGoesBackRegOutcome_2020.rds")
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/1-23-24inMigGoesBackRegOutcome_90.rds")
+saveRDS(newResponse, file = OUTCOME_GOBACK_90_RDS)
 
 
 
@@ -120,7 +121,7 @@ saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/
 #################  Part 3: make excess harvest in-migration 
 # C. 1-45 day window instead of 15-35 (part 3 of below code)
 rm(list = ls()); gc()
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_inMigration_2020.rds")
+outDTF <- readRDS(RESULTS_INMIG_RDS)
 
 distIDs <- unique(outDTF$distid)
 newResponse <- data.frame(distid = distIDs, 
@@ -156,11 +157,11 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
     }
   }
 }
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23inMigRegOutcome_1-45_2020.rds")
+saveRDS(newResponse, file = OUTCOME_1_45_RDS)
 
 # D. mean over 14-day continuous period rather than 7-day (part 3 of below code)
 rm(list = ls()); gc()
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_inMigration_2020.rds")
+outDTF <- readRDS(RESULTS_INMIG_RDS)
 
 distIDs <- unique(outDTF$distid)
 newResponse <- data.frame(distid = distIDs, 
@@ -196,13 +197,13 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
     }
   }
 }
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/9-26-23inMigRegOutcome_1-45_14days_2020.rds")
+saveRDS(newResponse, file = OUTCOME_1_45_14D_RDS)
 
 ############################# THIS SECTION: outcomes9 and 10: +/-14 days ############################# 
 library(dplyr)
 rm(list = ls()); gc()
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_2020.rds") %>% # says 6/5/23 but updated 7/24 after Shikhar fix 
+ddOutcomes <- readRDS(DD_OUTCOMES_RDS) %>% # says 6/5/23 but updated 7/24 after Shikhar fix 
   select(-starts_with("baseline"))
 
 ### use this file above but change this code
@@ -264,4 +265,4 @@ for (tmpYear in c(2014:2016, 2018:2020)) {
 
 # saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/outcome-14days.rds")
 
-saveRDS(newResponse, file = "/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/outcome14days.rds")
+saveRDS(newResponse, file = OUTCOME_PLUS14_RDS)

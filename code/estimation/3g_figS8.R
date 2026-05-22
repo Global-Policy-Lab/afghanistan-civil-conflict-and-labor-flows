@@ -1,11 +1,12 @@
 # Fig S7
 ########################### 3b ###########################
 rm(list = ls()); gc()
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+source("config.R")
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -120,8 +121,8 @@ plot1 <- outDTF %>%
   # scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig3b_pre2017.pdf"), width = 8, height = 5)
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig3b_post2017.pdf"), width = 8, height = 5) # post needs change to legend too
+# pdf(file.path(OUT_GENERAL, "1-10-24fig3b_pre2017.pdf"), width = 8, height = 5)
+pdf(file.path(OUT_GENERAL, "1-10-24fig3b_post2017.pdf"), width = 8, height = 5) # post needs change to legend too
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
@@ -226,7 +227,7 @@ removeYearsDest <- function(tmpYear) {
   gridExtra::grid.arrange(plot1, nrow = 1)
 }
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-10-24fig3b_robust2.pdf"), width = 8, height = 5)
+pdf(file.path(OUT_GENERAL, "1-10-24fig3b_robust2.pdf"), width = 8, height = 5)
 for (i in c(2014:2016, 2018:2020)) {
   removeYearsDest(i) 
 }

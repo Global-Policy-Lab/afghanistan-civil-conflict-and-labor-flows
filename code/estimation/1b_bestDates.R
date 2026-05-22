@@ -1,5 +1,6 @@
 rm(list = ls()); gc()
 library(dplyr)
+source("config.R")
 #### STEP 1: --- DONE
 # 1. for each data set in here: /data/afg_satellite/bestdates/pixel_maxdata_real/
       # these are MODIS coords of 250m pixels
@@ -12,14 +13,13 @@ library(dplyr)
 # 3. then cat all the files 
 
 # fileList <- system("ls /data/afg_satellite/bestdates/pixel_maxdata_real/", intern = TRUE)
-fileList <- system("ls /data/afg_satellite/bestdates/pixel_maxdata_real_June/", intern = TRUE) # update 4/25/22: first half only
+fileList <- system(paste0("ls ", PIXEL_MAXDATA_DIR, "/"), intern = TRUE) # update 4/25/22: first half only
 outFile <- c()
 
 for (i in 1:length(fileList)) {
-  if (i %% 50 == 0) cat(i, ", ") # ~1100 total 
-  # bestDates <- read.csv(paste0("/data/afg_satellite/bestdates/pixel_maxdata_real/", fileList[i]))
-  bestDates <- read.csv(paste0("/data/afg_satellite/bestdates/pixel_maxdata_real_June/", fileList[i]))
-  agrYN <- read.csv(paste0("/data/afg_satellite/bestdates/agrYN/", fileList[i]))
+  if (i %% 50 == 0) cat(i, ", ") # ~1100 total
+  bestDates <- read.csv(file.path(PIXEL_MAXDATA_DIR, fileList[i]))
+  agrYN <- read.csv(file.path(AGR_YN_DIR, fileList[i]))
   
   if ((identical(bestDates$Latitude, agrYN$Latitude) + identical(bestDates$Longitude, agrYN$Longitude) != 2) )
     warning(paste0(fileList[i], ": different lat-longs.\n"))
@@ -65,7 +65,7 @@ for (i in 1:length(fileList)) {
 #### STEP 2:  
 # match coordinates to district
 
-afghanShape <- sf::st_read("/data/afg_satellite/shp/district398/district398.shp", quiet = TRUE) %>% 
+afghanShape <- sf::st_read(DISTRICT_SHP, quiet = TRUE) %>%
   sf::st_transform(crs = 32642)
 
 sites <- sf::st_as_sf(outFile, coords = c("Longitude", "Latitude"), 
@@ -82,8 +82,8 @@ distIDs <- afghanShape$DISTID[unlist(whichDistricts)]
 outFile$distIDs <- distIDs
 outFile <- outFile[!is.na(outFile$distIDs), ]
 
-saveRDS(outFile, file = "/data/afg_satellite/bestdates/4-25-22agrBestDates_withDistIDs.rds")
-# saveRDS(outFile, file = "/data/afg_satellite/bestdates/4-25-22agrBestDates_withDistIDs_NDVI.rds") # second version has peak NDVI values (max) and first version has date with peak NDVI (arg max)
+saveRDS(outFile, file = AGR_BEST_DATES_RDS)
+# saveRDS(outFile, file = AGR_BEST_DATES_NDVI_RDS) # second version has peak NDVI values (max) and first version has date with peak NDVI (arg max)
 
 ########
 # 6/21/22: 
@@ -95,8 +95,8 @@ saveRDS(outFile, file = "/data/afg_satellite/bestdates/4-25-22agrBestDates_withD
 # check:
 # sum(!is.na(bestDatesFile$Best.Start.Date.2014)) # 658392
 # sum(outFile$Peak.NDVI.2014 <= .3, na.rm = TRUE) # 240802
-bestDatesFile <- readRDS("/data/afg_satellite/bestdates/4-25-22agrBestDates_withDistIDs.rds")
-outFile <- readRDS("/data/afg_satellite/bestdates/4-25-22agrBestDates_withDistIDs_NDVI.rds")
+bestDatesFile <- readRDS(AGR_BEST_DATES_RDS)
+outFile <- readRDS(AGR_BEST_DATES_NDVI_RDS)
 for (tmpCol in 3:9) { # roundabout way because of dataframe structure
   tmpNAs <- which(outFile[, tmpCol] <= .3) # HERE is the NDVI filter
   bestDatesFile[tmpNAs, tmpCol] <- NA
@@ -166,14 +166,14 @@ for (y in 2015:2020) {
     bind_rows(tmpDates)
 }
 
-saveRDS(bestDates, file = "/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") #
+saveRDS(bestDates, file = BEST_DATES_SAT)
 
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds")
+bestDatesLong <- readRDS(BEST_DATES_SAT)
 write.csv(bestDatesLong %>%
             select(distIDs, year, maxDate) %>%
             rename(distID = distIDs,
-                   date = maxDate), 
-          "/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.csv",
+                   date = maxDate),
+          BEST_DATES_SAT_CSV,
           row.names = FALSE)
 
 # check if they are unimodal or bimodal
@@ -184,7 +184,8 @@ bestDates %>% ggplot(aes(x = prop1, y = prop2, col = as.factor(year))) +
 # count number of agricultural pixels (NDVI > .3 in first half)
 rm(list = ls()); gc()
 library(dplyr)
-outFile <- readRDS("/data/afg_satellite/bestdates/4-25-22agrBestDates_withDistIDs_NDVI.rds")
+source("config.R")
+outFile <- readRDS(AGR_BEST_DATES_NDVI_RDS)
 
 # just need this 
 tryThis <- outFile %>%
@@ -198,7 +199,7 @@ agHectaresLong <- tryThis %>%
                       names_prefix = "Peak.NDVI.",
                       names_transform = list(year = function(x) (as.numeric(substr(x, 1, 4)))),
                       values_to = "agHectares") 
-saveRDS(agHectaresLong, file = "/home/xtai/climate/data/7-14-22agHectares.rds")
+saveRDS(agHectaresLong, file = AG_HECTARES_RDS)
 
 
 

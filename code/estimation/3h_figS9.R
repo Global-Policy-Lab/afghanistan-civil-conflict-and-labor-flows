@@ -1,11 +1,12 @@
 ######### fig 3a
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+source("config.R")
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -223,7 +224,7 @@ tmpFun <- function(tmpTitle) {
   
 }
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/12-14-23fig3b_violenceDef.pdf"), width = 8, height = 3)
+pdf(file.path(OUT_GENERAL, "12-14-23fig3b_violenceDef.pdf"), width = 8, height = 3)
 gridExtra::grid.arrange(plot1, nrow = 1)
 
 outDTFM4 <- outDTFM4 %>%

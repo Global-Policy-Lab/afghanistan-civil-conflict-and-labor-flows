@@ -1,17 +1,18 @@
 rm(list = ls()); gc()
+source("config.R")
 
 ################## fig 4a
 suffix <- "_rA"# "" # "_rB" # 
 
-bestDatesLongTmp <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLongTmp <- readRDS(BEST_DATES_SAT) %>%
   rename("distID" = "distIDs") %>%
   select(distID, year, maxDate) %>%
   mutate(currentMonth = lubridate::floor_date(as.Date(maxDate), "month")) %>%
   mutate(maxDate = as.Date(maxDate))
 
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds")
+ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS)
 
-ddOutcomes2 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23ddOutcomes_2020_checks.rds") # add propLow column from here 
+ddOutcomes2 <- readRDS(DD_OUTCOMES_CHECKS_RDS) # add propLow column from here 
 ddOutcomes$propLow <- ddOutcomes2$propLow
 
 myFun <- function(varName) {
@@ -46,12 +47,12 @@ tmpbaseline4 <- myFun("propHighNonV_NonTaliban") # i = 4
 tmpbaseline5 <- myFun("propLow") # i = 5 --- this is new 
 
 ######
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
-outcome3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
-outcome4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
-outcome5 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23L", suffix, "_2020_check.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
+outcome1 <- readRDS(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
+outcome2 <- readRDS(paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
+outcome3 <- readRDS(paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
+outcome4 <- readRDS(paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
+outcome5 <- readRDS(paste0(SUBGROUP_L_CHECK_BASE, suffix, "_2020_check.rds")) # use this to filter obs (baseline period needs 90 days, etc.)
+covariates <- readRDS(COVARIATES_RDS) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 # set up 
 plotDTF <- data.frame(model = c(rep("High-growing", 4), "Low-growing"), 
@@ -80,11 +81,11 @@ for (i in 1:5) {
   plotDTF[i, "harvestMedian"] <- median(outDTFM4$harvest[outDTFM4$poppyCat == "H"])
 }
 
-saveRDS(plotDTF, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-12-24fig4a.rds")
+saveRDS(plotDTF, file = FIG4A_DATA_RDS)
 
 ##########################################################
 rm(list = ls()); gc()
-plotDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-12-24fig4a.rds")
+plotDTF <- readRDS(FIG4A_DATA_RDS)
 
 plotDTF$label <- c("2_Violence Y, Taliban Y", 
                    "4_Violence Y, Taliban N",
@@ -145,7 +146,7 @@ plot1 <- rbind(plotDTF, data.frame(model = "High-growing",
 #                                                  "#55c667", "#1f968b"
 # )))) # this last row makes the transparency 100
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-12-24fig4a.pdf"), width = 8, height = 4)
+pdf(file.path(OUT_GENERAL, "1-12-24fig4a.pdf"), width = 8, height = 4)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
@@ -153,10 +154,10 @@ dev.off()
 ##### HIGH/LOW results (fig 4b)
 rm(list = ls()); gc()
 suffix <- "_rA"#  ""  # "_rB"#  
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23H", suffix, "_2020_check.rds"))
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23L", suffix, "_2020_check.rds"))
+outcome1 <- readRDS(paste0(SUBGROUP_H_CHECK_BASE, suffix, "_2020_check.rds"))
+outcome2 <- readRDS(paste0(SUBGROUP_L_CHECK_BASE, suffix, "_2020_check.rds"))
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -216,13 +217,13 @@ for (i in 1:2) {
   outDTF[i, "CIhigh"] <- tmp["poppyCatH", "Estimate"] + qnorm(.975)*tmp["poppyCatH", "Std. Error"]
 }
 
-saveRDS(outDTF, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-6-23sourceHL.rds")
+saveRDS(outDTF, file = SOURCE_HL_RDS)
 #          label    estimate       CIlow     CIhigh
 # 1 High-growing 0.047316630  0.01721958 0.07741368
 # 2  Low-growing 0.006960807 -0.01459271 0.02851432
 
 rm(list = ls()); gc()
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-6-23sourceHL.rds")
+outDTF <- readRDS(SOURCE_HL_RDS)
 outDTF$variance <- ((outDTF$CIhigh - outDTF$estimate)/qnorm(.975))^2
 outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
 #          label    estimate       CIlow     CIhigh     variance           p
@@ -262,8 +263,8 @@ plot1 <- outDTF %>%
 scale_x_discrete(labels = c("High-cultivation\nsources", "Low-cultivation\nsources")) + # bottom to top
   theme(axis.text.y  = element_text(hjust=0.5))
 
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23fig4b.pdf"), width = 7, height = 2)
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-9-24fig4b.pdf"), width = 7, height = 2)
+# pdf(file.path(OUT_GENERAL, "8-1-23fig4b.pdf"), width = 7, height = 2)
+pdf(file.path(OUT_GENERAL, "1-9-24fig4b.pdf"), width = 7, height = 2)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
@@ -271,12 +272,12 @@ dev.off()
 # violence H T
 rm(list = ls()); gc()
 suffix <- "_rA"#  ""  # "_rB"#  
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds"))
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds"))
-outcome3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds"))
-outcome4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds"))
+outcome1 <- readRDS(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds"))
+outcome2 <- readRDS(paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds"))
+outcome3 <- readRDS(paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds"))
+outcome4 <- readRDS(paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds"))
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -381,11 +382,11 @@ for (i in 1:4) {
 }
 
 
-saveRDS(outDTF, file = "/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-6-23sourceH.rds")
+saveRDS(outDTF, file = SOURCE_H_RDS)
 
 ###########################################
 rm(list = ls()); gc()
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-6-23sourceH.rds")
+outDTF <- readRDS(SOURCE_H_RDS)
 outDTF$variance <- ((outDTF$CIhigh - outDTF$estimate)/qnorm(.975))^2
 outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
 #          model                 label   estimate         CIlow     CIhigh     variance          p
@@ -434,8 +435,8 @@ plot1 <- outDTF %>%
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 
 
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/10-24-23fig4c.pdf"), width = 8, height = 3)
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-9-24fig4c.pdf"), width = 7, height = 3.5)
+# pdf(file.path(OUT_GENERAL, "10-24-23fig4c.pdf"), width = 8, height = 3)
+pdf(file.path(OUT_GENERAL, "1-9-24fig4c.pdf"), width = 7, height = 3.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

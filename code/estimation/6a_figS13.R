@@ -2,8 +2,9 @@
 # this file preps source
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
+source("config.R")
 
-bestDatesLong <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLong <- readRDS(BEST_DATES_SAT) %>%
   select(distIDs, year, maxDate) %>%
   rename("distID" = "distIDs",
          "date" = "maxDate")
@@ -23,11 +24,11 @@ as.Date("2013-04-01") + lubridate::days(875 - 1) # "2015-08-23"
 
 # i.e., need impact days 521:875 (355 days)
 
-# fileList <- list.files("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_30_days/")
+# fileList <- list.files(CDR_K30_DIR)
 
 ODfun <- function(impactDay) {
   # first fix the data issues 
-  tmpFile <- read.csv(paste0("/data/afg_anon/displacement_metrics/visits_per_district_day/using_2013-2020_data/time_delta_30_days/impact_day_", impactDay, ".csv"))
+  tmpFile <- read.csv(file.path(CDR_K30_DIR, paste0("impact_day_", impactDay, ".csv")))
   if (nrow(tmpFile) != 398*398) {
     stop(paste0(impactDay, ": wrong number of rows"))
   }
@@ -92,17 +93,17 @@ ddOutcomes <- ddOutcomes %>%
   filter(baseline_2015 == 1)
 # 1791175 rows 
 
-saveRDS(ddOutcomes, file = "/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/1-22-24OD_raw.rds")
+saveRDS(ddOutcomes, file = OD_RAW_RDS)
 
 ########################################################################################
 rm(list = ls()); gc()
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/1-22-24OD_raw.rds")
+ddOutcomes <- readRDS(OD_RAW_RDS)
 ddOutcomes <- ddOutcomes %>%
   select(origin_district, district_id, impacted, visits, origin_date, date, year_2015) %>%
   rename(bestDate2015 = year_2015) # district_id is the destination, date is destination date (visit_date)
 
 # we need numNew
-checkFile <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_violence_HNL_T_2020.rds") %>%
+checkFile <- readRDS(DD_OUTCOMES_VIOLENCE_RDS) %>%
   select(district_id, date, numNew) # date here is the visit_date, district_id is destination
 
 ddOutcomes <- ddOutcomes %>%
@@ -142,7 +143,7 @@ length(unique(out$origin_district)) # 238
 length(unique(out$district_id)) # 237
 
 
-# outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", "_rA", "_2020.rds")) %>%
+# outcome1 <- readRDS(paste0(SUBGROUP_HVT_BASE, "_rA", "_2020.rds")) %>%
 #   filter(year == 2015) %>%# 280 obs
 #   filter(!is.na(maxIn))
 # sum(!is.na(outcome1$maxIn))
@@ -180,20 +181,20 @@ for (i in 1:nrow(out)) {
 
 out$diff <- out$harvest - out$baseline
 
-saveRDS(out, file = "/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/1-22-24OD_out.rds")
+saveRDS(out, file = OD_OUT_RDS)
 
 ########################################################################################
 rm(list = ls()); gc()
-out <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/1-22-24OD_out.rds")
+out <- readRDS(OD_OUT_RDS)
 out <- out %>%
   ungroup()
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>% # has poppyCat from years 2014 to 2020 by district 
+covariates <- readRDS(COVARIATES_RDS) %>% # has poppyCat from years 2014 to 2020 by district 
   select(-geometry) %>%
   filter(year == 2015) %>%
   select(distid, poppyCat)
 
-districtInfo <- readRDS("/data/afg_anon/displacement_analysis/district_ids_with_info.rds")
+districtInfo <- readRDS(DISTRICT_IDS)
 covariates <- covariates %>%
   left_join(districtInfo %>%
               select(prov_name, dist_name, distid, provid),
@@ -252,7 +253,7 @@ destinationLabels$finalLabel[destinationLabels$finalLabel == "Faryab"] <- "\n\nF
 destinationLabels$finalLabel[destinationLabels$finalLabel == "Paktika"] <- "\nPaktika" 
 
 
-pdf("/home/xtai/climate/3-8-23migrationCleanCode/8-9-24review1/ODmatrix.pdf", width = 12, height = 10)
+pdf(file.path(OUT_REVIEW1, "ODmatrix.pdf"), width = 12, height = 10)
 out %>%
   # filter(numObs >= 40) %>% # change this 
   mutate(diff = ifelse(diff > .025, .025, diff)) %>%

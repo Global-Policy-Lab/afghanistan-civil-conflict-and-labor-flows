@@ -1,8 +1,9 @@
 
 ##### reviewer request: descriptive statistics 
 rm(list = ls()); gc()
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+source("config.R")
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -39,11 +40,11 @@ stargazer::stargazer(tmp,
 #### for outcomes and variables of interest 
 
 rm(list = ls()); gc()
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -63,18 +64,18 @@ outDTFM4 <- outDTFM4 %>%
          poppyL = ifelse(poppyCat == "L", 1, 0))
 
 suffix <- "_rA"#  ""  # "_rB"#  
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23H", suffix, "_2020_check.rds")) %>%
+outcome1 <- readRDS(paste0(SUBGROUP_H_CHECK_BASE, suffix, "_2020_check.rds")) %>%
   rename(outcomeHigh = maxIn)
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23L", suffix, "_2020_check.rds")) %>%
+outcome2 <- readRDS(paste0(SUBGROUP_L_CHECK_BASE, suffix, "_2020_check.rds")) %>%
   rename(outcomeLow = maxIn)
 
-outcome3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds")) %>%
+outcome3 <- readRDS(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds")) %>%
   rename(outcomeHVT = maxIn)
-outcome4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds")) %>%
+outcome4 <- readRDS(paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds")) %>%
   rename(outcomeHVnonT = maxIn)
-outcome5 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds")) %>%
+outcome5 <- readRDS(paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds")) %>%
   rename(outcomeHnonVT = maxIn)
-outcome6 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds")) %>%
+outcome6 <- readRDS(paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds")) %>%
   rename(outcomeHnonVnonT = maxIn)
 
 
@@ -115,8 +116,8 @@ stargazer::stargazer(tmp,
 
 ################################# fig 2c (reg results) #################################
 rm(list = ls()); gc()
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -138,11 +139,11 @@ fit1$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diver
 
 
 ################ fig 3b
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -169,10 +170,10 @@ new3$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diver
 ##### HIGH/LOW results
 # rm(list = ls()); gc()
 suffix <- "_rA"#  ""  # "_rB"#  
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23H", suffix, "_2020_check.rds"))
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23L", suffix, "_2020_check.rds"))
+outcome1 <- readRDS(paste0(SUBGROUP_H_CHECK_BASE, suffix, "_2020_check.rds"))
+outcome2 <- readRDS(paste0(SUBGROUP_L_CHECK_BASE, suffix, "_2020_check.rds"))
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -213,12 +214,12 @@ fit4$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diver
 
 ###### source results 
 suffix <- "_rA"#  ""  # "_rB"#  
-outcome1 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_T", suffix, "_2020.rds"))
-outcome2 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_V_NonT", suffix, "_2020.rds"))
-outcome3 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_T", suffix, "_2020.rds"))
-outcome4 <- readRDS(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23H_NonV_NonT", suffix, "_2020.rds"))
+outcome1 <- readRDS(paste0(SUBGROUP_HVT_BASE, suffix, "_2020.rds"))
+outcome2 <- readRDS(paste0(SUBGROUP_HVNONT_BASE, suffix, "_2020.rds"))
+outcome3 <- readRDS(paste0(SUBGROUP_HNONVT_BASE, suffix, "_2020.rds"))
+outcome4 <- readRDS(paste0(SUBGROUP_HNONVNONT_BASE, suffix, "_2020.rds"))
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -290,12 +291,12 @@ fit8$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diver
 
 ## eradication 
 
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
 
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry, -talibanCurrent, -inaccessibleCurrent, -insecurity, -scale3, -scale4, -scale5, -talibanConInf)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
-eradicationData <- read.csv("/home/xtai/climate/data/eradication_2014-2016.csv")
+eradicationData <- read.csv(ERADICATION_CSV)
 eradicationLong <- eradicationData %>%
   tidyr::pivot_longer(cols = starts_with("X"), 
                       names_to = "year", 

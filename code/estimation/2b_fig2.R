@@ -2,11 +2,12 @@
 library(dplyr); library(ggplot2)
 ### fig 2a and b
 rm(list = ls()); gc()
-distYears <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23distYearsIncluded_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+source("config.R")
+distYears <- readRDS(DIST_YEARS_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   select(-geometry)
 
-outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23results_inMigration_2020.rds")
+outDTF <- readRDS(RESULTS_INMIG_RDS)
 # outDTF <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/7-31-23results_outMigration_2020.rds")
 
 outDTF <- outDTF %>%
@@ -26,8 +27,8 @@ forPlot <- outDTF %>%
 
 viridisThreeColor <- c("#fde725", "#21918c", "#440154")
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23fig2a.pdf"), width = 10, height = 5)
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23fig2b.pdf"), width = 10, height = 5)
+pdf(file.path(OUT_GENERAL, "8-1-23fig2a.pdf"), width = 10, height = 5)
+# pdf(file.path(OUT_GENERAL, "8-1-23fig2b.pdf"), width = 10, height = 5)
 forPlot %>%
   ggplot(aes(daysFromPeak, meanEffect, col = poppyCat))+
   geom_point()+
@@ -65,8 +66,8 @@ tmp <- forPlot %>% filter(poppyCat == "H" & daysFromPeak == 21)
 
 ### fig 2c
 rm(list = ls()); gc()
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, talibanCurrent and inaccessibleCurrent
 
 outDTFM4 <- covariates %>%
@@ -116,8 +117,8 @@ plot1 <- plotDTF %>%
     x = "",
   ) 
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-9-24fig2c.pdf"), width = 6.5, height = 1.5)
-# pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/8-1-23fig2c.pdf"), width = 6.5, height = 1.5)
+pdf(file.path(OUT_GENERAL, "1-9-24fig2c.pdf"), width = 6.5, height = 1.5)
+# pdf(file.path(OUT_GENERAL, "8-1-23fig2c.pdf"), width = 6.5, height = 1.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 # rsync -P -e 'ssh -J xtai@hilbert.ucdavis.edu' xtai@fati.ischool.berkeley.edu:/home/xtai/climate/3-8-23migrationCleanCode/output/general/* /Users/xtai/Desktop/seasonalMigration/paper/general
@@ -141,9 +142,9 @@ sum(covariates$TOTAL[covariates$year == 2020 & covariates$poppyCat == "H"])*.027
 
 ############# fig 2d
 # don't clear data from fig 2c
-ddOutcomes <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23ddOutcomes_2020.rds")
+ddOutcomes <- readRDS(DD_OUTCOMES_RDS)
 
-bestDatesLongTmp <- readRDS("/data/afg_satellite/bestdates/6-22-22bestDatesLong_M4.rds") %>%
+bestDatesLongTmp <- readRDS(BEST_DATES_SAT) %>%
   rename("distID" = "distIDs") %>%
   dplyr::select(distID, year, maxDate) %>%
   mutate(currentMonth = lubridate::floor_date(as.Date(maxDate), "month")) %>%
@@ -266,7 +267,7 @@ plot2 <- outDTFM4 %>%
   ) +
   guides(fill = guide_legend(override.aes = list(alpha = 1))) 
 
-pdf(paste0("/home/xtai/climate/3-8-23migrationCleanCode/output/general/1-12-24fig2d.pdf"), width = 8, height = 7)
+pdf(file.path(OUT_GENERAL, "1-12-24fig2d.pdf"), width = 8, height = 7)
 gridExtra::grid.arrange(plot1, plot2, nrow = 2)
 dev.off()
 

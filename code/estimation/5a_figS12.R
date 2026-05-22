@@ -1,12 +1,13 @@
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 library(tidyr)
+source("config.R")
 
-outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
-covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+outcome1 <- readRDS(INMIG_OUTCOME_RDS)
+covariates <- readRDS(COVARIATES_RDS) %>%
   dplyr::select(-geometry) # this version should have poppyCat, notGovt
 
-newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS(VIOLENCE_DEST_RDS)
 
 outDTFM4 <- covariates %>%
   left_join(outcome1, by = c("distid", "year")) %>%
@@ -21,7 +22,7 @@ outDTFM4 <- covariates %>%
             by = c("distid", "year")) %>%
   filter(!is.na(maxIn)) # %>%
 
-d1 <- read.csv("/data/afg_satellite/snair/violence_temp_v3.csv")
+d1 <- read.csv(VIOLENCE_ROAD_CSV)
 d1 <- rename(d1, distid = DISTID)
 
 # d2 <- read.csv("/data/afg_satellite/snair/violence_temp_v4.csv")
@@ -152,7 +153,7 @@ plot5 <- outDTF_joint %>%
   # geom_vline(xintercept = 2.5, colour = "grey60", linetype = 2) +
   scale_x_discrete(labels = c("V = Yes, RV = Yes", "V = Yes, RV = No","V = No, RV = Yes", "V = No, RV = No",
                               "V = Yes, RV = Yes", "V = Yes, RV = No","V = No, RV = Yes", "V = No, RV = No")) # bottom to top 
-pdf(paste0("10-24-23fig3b_alt.pdf"), width = 8, height = 8)
+pdf(file.path(OUT_GENERAL, "10-24-23fig3b_alt.pdf"), width = 8, height = 8)
 gridExtra::grid.arrange(plot5, nrow = 1)
 dev.off()
 
