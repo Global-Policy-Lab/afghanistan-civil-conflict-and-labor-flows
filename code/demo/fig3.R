@@ -2,9 +2,9 @@
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 
-demoData <- readRDS("./data/fig3Demo.rds") # note that this is a subset of the original data with 400 obs
+demoData <- readRDS("./demo/data/fig3Demo.rds") # note that this is a subset of the original data with 400 obs
 # (contains in-migration outcome + covariates)
-newViolence <- readRDS("./data/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS("./demo/data/6-5-23violenceDest_2020.rds")
 
 outDTFM4 <- demoData %>%
   mutate(prov = floor(distid/100)) %>%
@@ -14,7 +14,7 @@ outDTFM4 <- demoData %>%
             by = c("distid", "year")) %>%
   filter(!is.na(maxIn)) # %>%
 
-pdf(paste0("fig3a.pdf"), width = 8, height = 4)
+pdf(paste0("./demo/fig3a.pdf"), width = 8, height = 4)
 outDTFM4 %>%
   filter(poppyCat == "H") %>%
   mutate(cat = case_when(
@@ -135,7 +135,7 @@ plot1 <- outDTF %>%
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 # scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
 
-pdf(paste0("fig3b.pdf"), width = 8, height = 3)
+pdf(paste0("./demo/fig3b.pdf"), width = 8, height = 3)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

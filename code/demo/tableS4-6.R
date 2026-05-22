@@ -165,7 +165,7 @@ fit8 <- lm(outcomeHnonVnonT ~ poppyCat + log(areakm2) +
 fit8$tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$outcomeHnonVnonT) & !is.na(outDTFM4$diversity) & !is.na(outDTFM4$trackPathFrac)]
 
 ## eradication 
-eradicationData <- read.csv("/home/xtai/climate/data/eradication_2014-2016.csv")
+eradicationData <- read.csv("./demo/data/eradication_2014-2016.csv")
 eradicationLong <- eradicationData %>%
   tidyr::pivot_longer(cols = starts_with("X"), 
                       names_to = "year", 

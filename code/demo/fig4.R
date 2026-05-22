@@ -2,7 +2,7 @@ rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 
 ################## fig 4a
-plotDTF <- readRDS("./data/1-12-24fig4a.rds") # plot data
+plotDTF <- readRDS("./demo/data/1-12-24fig4a.rds") # plot data
 
 plotDTF$label <- c("2_Violence Y, Taliban Y", 
                    "4_Violence Y, Taliban N",
@@ -63,14 +63,14 @@ plot1 <- rbind(plotDTF, data.frame(model = "High-growing",
 #                                                  "#55c667", "#1f968b"
 # )))) # this last row makes the transparency 100
 
-pdf(paste0("fig4a.pdf"), width = 8, height = 4)
+pdf(paste0("./demo/fig4a.pdf"), width = 8, height = 4)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
 ################## fig 4b
 rm(list = ls()); gc()
 
-outDTFM4 <- readRDS("./data/fig4bcDemo_high.rds") # note that this is a subset of the original data with 280 obs 
+outDTFM4 <- readRDS("./demo/data/fig4bcDemo_high.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -85,7 +85,7 @@ fit1 <- lm(maxIn ~ poppyCat + log(areakm2) +
 tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity) & !is.na(outDTFM4$trackPathFrac)]
 fit1coefs <- lmtest::coeftest(fit1, vcov. = sandwich::vcovCL(fit1, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
-outDTFM4 <- readRDS("./data/fig4bcDemo_low.rds") # note that this is a subset of the original data with 280 obs
+outDTFM4 <- readRDS("./demo/data/fig4bcDemo_low.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit2 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -151,14 +151,14 @@ plot1 <- outDTF %>%
   scale_x_discrete(labels = c("High-cultivation\nsources", "Low-cultivation\nsources")) + # bottom to top
   theme(axis.text.y  = element_text(hjust=0.5))
 
-pdf(paste0("fig4b.pdf"), width = 7, height = 2)
+pdf(paste0("./demo/fig4b.pdf"), width = 7, height = 2)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
 ###### source results (fig 4c)
 # violence H T
 rm(list = ls()); gc()
-outDTFM4 <- readRDS("./data/fig4cDemo_HVT.rds") # note that this is a subset of the original data with 280 obs
+outDTFM4 <- readRDS("./demo/data/fig4cDemo_HVT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -177,7 +177,7 @@ tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity)
 fit1coefs <- lmtest::coeftest(fit1, vcov. = sandwich::vcovCL(fit1, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_V_NonT.rds") # note that this is a subset of the original data with 280 obs
+outDTFM4 <- readRDS("./demo/data/fig4cDemo_H_V_NonT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit2 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -197,7 +197,7 @@ fit2coefs <- lmtest::coeftest(fit2, vcov. = sandwich::vcovCL(fit2, cluster = as.
 
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_T.rds") # note that this is a subset of the original data with 280 obs
+outDTFM4 <- readRDS("./demo/data/fig4cDemo_H_NonV_T.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit3 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -213,7 +213,7 @@ tmpDistID <- outDTFM4$distid[!is.na(outDTFM4$maxIn) & !is.na(outDTFM4$diversity)
 fit3coefs <- lmtest::coeftest(fit3, vcov. = sandwich::vcovCL(fit3, cluster = as.factor(tmpDistID), type = "HC1")) # takes less than a minute!
 
 ### H_V_NonT
-outDTFM4 <- readRDS("./data/fig4cDemo_H_NonV_NonT.rds") # note that this is a subset of the original data with 280 obs
+outDTFM4 <- readRDS("./demo/data/fig4cDemo_H_NonV_NonT.rds") # note that this is a subset of the original data with 280 obs
 
 # categorical version
 fit4 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -287,7 +287,7 @@ plot1 <- outDTF %>%
   # scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 
-pdf(paste0("fig4c.pdf"), width = 7, height = 3.5)
+pdf(paste0("./demo/fig4c.pdf"), width = 7, height = 3.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

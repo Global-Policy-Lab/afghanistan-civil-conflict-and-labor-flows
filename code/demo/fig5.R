@@ -4,13 +4,13 @@ rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
 # first check if eradication happens in districts with Taliban control or not 
 
-demoData <- readRDS("./data/fig3Demo.rds")  # note that this is a subset of the original data with 400 obs
+demoData <- readRDS("./demo/data/fig3Demo.rds")  # note that this is a subset of the original data with 400 obs
 # in-migration outcome + covariates
-covariates <- readRDS("./data/covariates.rds")
+covariates <- readRDS("./demo/data/covariates.rds")
 
-newViolence <- readRDS("./data/6-5-23violenceDest_2020.rds")
+newViolence <- readRDS("./demo/data/6-5-23violenceDest_2020.rds")
 
-eradicationData <- read.csv("./data/eradication_2014-2016.csv")
+eradicationData <- read.csv("./demo/data/eradication_2014-2016.csv")
 eradicationLong <- eradicationData %>%
   tidyr::pivot_longer(cols = starts_with("X"), 
                       names_to = "year", 
@@ -47,7 +47,7 @@ outDTFM4 <- demoData %>%
 
 
 ########################## fig 5A ############################
-pdf(paste0("fig5a.pdf"), width = 8, height = 4.5)
+pdf(paste0("./demo/fig5a.pdf"), width = 8, height = 4.5)
 outDTFM4 %>%
   filter(poppyCat == "H") %>%
   filter(eradicationYN == 1) %>%
@@ -164,6 +164,6 @@ plot1 <- outDTF %>%
   coord_flip(clip = "off", ylim = c(-.13, 0.05)) +
   scale_x_discrete(labels = c("High*Eradication Percent", "Eradication Percent", "High-cultivation")) # bottom to top 
 
-pdf(paste0("fig5a.pdf"), width = 8, height = 2.8)
+pdf(paste0("./demo/fig5b.pdf"), width = 8, height = 2.8)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()

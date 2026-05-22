@@ -3,9 +3,8 @@ library(dplyr); library(ggplot2)
 
 ############### fig 2a ###############
 rm(list = ls()); gc()
-setwd("./demo")
-outDTF <- readRDS("./data/fig2aDemo.rds") # note that this is a subset of the original data with 10000 obs
-distYears <- readRDS("./data/6-5-23distYearsIncluded_2020.rds") # for missing data handling
+outDTF <- readRDS("./demo/data/fig2aDemo.rds") # note that this is a subset of the original data with 10000 obs
+distYears <- readRDS("./demo/data/6-5-23distYearsIncluded_2020.rds") # for missing data handling
 
 forPlot <- outDTF %>%
   mutate(distidYear = paste0(distid, "_", year)) %>% # new for missing data
@@ -19,7 +18,7 @@ forPlot <- outDTF %>%
 
 viridisThreeColor <- c("#fde725", "#21918c", "#440154")
 
-pdf(paste0("fig2a.pdf"), width = 10, height = 5)
+pdf(paste0("./demo/fig2a.pdf"), width = 10, height = 5)
 forPlot %>%
   ggplot(aes(daysFromPeak, meanEffect, col = poppyCat))+
   geom_point()+
@@ -52,7 +51,7 @@ forPlot %>%
 dev.off()
 
 ############### fig 2b ###############
-outDTF <- readRDS("./data/fig2bDemo.rds") # note that this is a subset of the original data with 10000 obs
+outDTF <- readRDS("./demo/data/fig2bDemo.rds") # note that this is a subset of the original data with 10000 obs
 forPlot <- outDTF %>%
   mutate(distidYear = paste0(distid, "_", year)) %>% # new for missing data
   filter(distidYear %in% distYears) %>% # new for missing data
@@ -65,7 +64,7 @@ forPlot <- outDTF %>%
 
 viridisThreeColor <- c("#fde725", "#21918c", "#440154")
 
-pdf(paste0("fig2b.pdf"), width = 10, height = 5)
+pdf(paste0("./demo/fig2b.pdf"), width = 10, height = 5)
 forPlot %>%
   ggplot(aes(daysFromPeak, meanEffect, col = poppyCat))+
   geom_point()+
@@ -99,7 +98,7 @@ dev.off()
 
 ############### fig 2c ###############
 rm(list = ls()); gc()
-outDTFM4 <- readRDS("./data/fig2cDemo.rds")
+outDTFM4 <- readRDS("./demo/data/fig2cDemo.rds")
 
 viridisThreeColor <- c("#440154E6", "#21908C80", "#FDE72580") # first is purple
 
@@ -194,7 +193,7 @@ plot2 <- outDTFM4 %>%
   ) +
   guides(fill = guide_legend(override.aes = list(alpha = 1))) 
 
-pdf(paste0("fig2c.pdf"), width = 8, height = 7)
+pdf(paste0("./demo/fig2c.pdf"), width = 8, height = 7)
 gridExtra::grid.arrange(plot1, plot2, nrow = 2)
 dev.off()
 
@@ -202,7 +201,7 @@ dev.off()
 
 ############### fig 2d ###############
 rm(list = ls()); gc()
-outDTFM4 <- readRDS("./data/fig2dDemo.rds") # note that this is a subset of the original data with 120 obs
+outDTFM4 <- readRDS("./demo/data/fig2dDemo.rds") # note that this is a subset of the original data with 120 obs
 
 # categorical version
 fit1 <- lm(maxIn ~ poppyCat + log(areakm2) + 
@@ -243,7 +242,7 @@ plot1 <- plotDTF %>%
     x = "",
   ) 
 
-pdf(paste0("fig2d.pdf"), width = 6.5, height = 1.5)
+pdf(paste0("./demo/fig2d.pdf"), width = 6.5, height = 1.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
