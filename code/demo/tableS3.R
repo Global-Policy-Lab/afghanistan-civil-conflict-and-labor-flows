@@ -1,6 +1,6 @@
 ########################### REGS START HERE ############################
 rm(list = ls()); gc()
-library(stargazer)
+library(dplyr); library(stargazer)
 
 
 outDTFM4 <- readRDS("./demo/data/tableS3.rds") # this is a subset of the original data with 120 obs

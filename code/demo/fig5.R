@@ -47,7 +47,7 @@ outDTFM4 <- demoData %>%
 
 
 ########################## fig 5A ############################
-pdf(paste0("./demo/fig5a.pdf"), width = 8, height = 4.5)
+pdf(paste0("./demo/output/fig5a.pdf"), width = 8, height = 4.5)
 outDTFM4 %>%
   filter(poppyCat == "H") %>%
   filter(eradicationYN == 1) %>%
@@ -164,6 +164,6 @@ plot1 <- outDTF %>%
   coord_flip(clip = "off", ylim = c(-.13, 0.05)) +
   scale_x_discrete(labels = c("High*Eradication Percent", "Eradication Percent", "High-cultivation")) # bottom to top 
 
-pdf(paste0("./demo/fig5b.pdf"), width = 8, height = 2.8)
+pdf(paste0("./demo/output/fig5b.pdf"), width = 8, height = 2.8)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()

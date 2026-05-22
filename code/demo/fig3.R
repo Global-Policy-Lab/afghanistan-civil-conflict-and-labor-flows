@@ -14,7 +14,7 @@ outDTFM4 <- demoData %>%
             by = c("distid", "year")) %>%
   filter(!is.na(maxIn)) # %>%
 
-pdf(paste0("./demo/fig3a.pdf"), width = 8, height = 4)
+pdf(paste0("./demo/output/fig3a.pdf"), width = 8, height = 4)
 outDTFM4 %>%
   filter(poppyCat == "H") %>%
   mutate(cat = case_when(
@@ -122,7 +122,7 @@ plot1 <- outDTF %>%
   # labs(tag = "Violence = Yes \n\n\n\n\n Violence = No") +
   theme(plot.tag.position = c(-.07, .57),
         text = element_text(size = 12),
-        plot.margin = theme_get()$plot.margin + unit(c(0, 0, 0, 3), "cm")
+        plot.margin = margin(0, 0, 0, 3, "cm")
   ) +
   coord_flip(clip = "off"
              , ylim = c(-.01, 0.075)
@@ -135,7 +135,7 @@ plot1 <- outDTF %>%
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 # scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
 
-pdf(paste0("./demo/fig3b.pdf"), width = 8, height = 3)
+pdf(paste0("./demo/output/fig3b.pdf"), width = 8, height = 3)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

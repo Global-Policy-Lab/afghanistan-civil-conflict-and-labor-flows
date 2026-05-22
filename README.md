@@ -16,12 +16,47 @@ However, all the code required to process the data and produce the results are i
 - `estimation`: code to create the analysis data set and produce all results
 
 # Demo
-The `demo` folder is a self-contained folder that users can run to produce all the figures and tables in the paper. Sample data sets are provided where original data cannot be released, and are indicated as such in the code. Simply run the R scripts corresponding to the figure or table number to load the data and produce the corresponding figures and tables. 
+The `demo` folder is a self-contained folder that users can run to produce all the figures and tables in the paper. Sample data sets are provided where original data cannot be released, and are indicated as such in the code.
 
+To run the demo scripts, set your working directory to the `code/` folder and run the R script corresponding to the figure or table number:
 
-# System requirements 
-(to do)  
+```r
+setwd("path/to/repo/code")
+source("demo/fig2.R")
+```
 
-- Software dependencies and operating systems
-- Versions the software has been tested on
-- Any required non-standard hardware
+Output PDFs are written to `code/demo/output/`.
+
+# System requirements
+
+## R packages
+
+The demo scripts require the following R packages:
+
+| Package | Purpose |
+|---|---|
+| `dplyr` | Data manipulation |
+| `ggplot2` | Figures |
+| `gridExtra` | Multi-panel figure layout |
+| `scales` | Axis formatting |
+| `tidyr` | Data reshaping |
+| `lmtest` | Clustered standard errors |
+| `sandwich` | Variance-covariance matrices |
+| `stargazer` | Regression tables |
+| `sf` | Spatial data (supplementary figures) |
+| `viridis` | Color palettes (supplementary figures) |
+| `colorspace` | Color palettes (supplementary figures) |
+| `knitr` | Table formatting (supplementary figures) |
+
+Install all packages at once:
+
+```r
+install.packages(c("dplyr", "ggplot2", "gridExtra", "scales", "tidyr",
+                   "lmtest", "sandwich", "stargazer", "sf", "viridis",
+                   "colorspace", "knitr"))
+```
+
+## Software and hardware
+
+- R version 4.0 or higher (tested on R 4.5)
+- No non-standard hardware required

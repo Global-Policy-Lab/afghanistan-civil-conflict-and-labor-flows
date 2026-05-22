@@ -63,7 +63,7 @@ plot1 <- rbind(plotDTF, data.frame(model = "High-growing",
 #                                                  "#55c667", "#1f968b"
 # )))) # this last row makes the transparency 100
 
-pdf(paste0("./demo/fig4a.pdf"), width = 8, height = 4)
+pdf(paste0("./demo/output/fig4a.pdf"), width = 8, height = 4)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
@@ -151,7 +151,7 @@ plot1 <- outDTF %>%
   scale_x_discrete(labels = c("High-cultivation\nsources", "Low-cultivation\nsources")) + # bottom to top
   theme(axis.text.y  = element_text(hjust=0.5))
 
-pdf(paste0("./demo/fig4b.pdf"), width = 7, height = 2)
+pdf(paste0("./demo/output/fig4b.pdf"), width = 7, height = 2)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 
@@ -274,7 +274,7 @@ plot1 <- outDTF %>%
   # labs(tag = "Violence = Yes \n\n\n\n\n Violence = No") +
   theme(plot.tag.position = c(-.07, .58),
         text = element_text(size = 12),
-        plot.margin = theme_get()$plot.margin + unit(c(0, 0, 0, 3), "cm")
+        plot.margin = margin(0, 0, 0, 3, "cm")
   ) +
   coord_flip(clip = "off"
              , ylim = c(-.005, 0.042)
@@ -287,7 +287,7 @@ plot1 <- outDTF %>%
   # scale_x_discrete(labels = c("Taliban = No", "Taliban = Yes", "Taliban = No", "Taliban = Yes")) # bottom to top 
   scale_x_discrete(labels = c("Violence = Yes", "Violence = No", "Violence = Yes", "Violence = No")) # bottom to top 
 
-pdf(paste0("./demo/fig4c.pdf"), width = 7, height = 3.5)
+pdf(paste0("./demo/output/fig4c.pdf"), width = 7, height = 3.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

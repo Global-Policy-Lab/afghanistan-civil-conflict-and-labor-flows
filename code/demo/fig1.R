@@ -1,6 +1,6 @@
 # FIGURE 1c
 rm(list = ls()); gc()
-library(ggplot2); library(gridExtra)
+library(ggplot2); library(gridExtra); library(dplyr)
 
 load("./demo/data/fig1c.RData")
 

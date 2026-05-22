@@ -1,4 +1,5 @@
 rm(list = ls()); gc()
+library(dplyr)
 
 ## Table S4
 outDTFM4 <- readRDS("./demo/data/fig2dDemo.rds") # note that this is a subset of the original data with 120 obs

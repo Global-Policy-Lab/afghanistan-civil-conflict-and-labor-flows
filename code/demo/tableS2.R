@@ -1,5 +1,5 @@
 rm(list = ls()); gc()
-library(stargazer)
+library(dplyr); library(stargazer)
 
 load("./demo/data/tableS2.Rdata") # loads outDTFM4, a subset of the original data with 120 obs
 

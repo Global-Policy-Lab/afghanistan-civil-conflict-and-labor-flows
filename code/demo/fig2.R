@@ -18,7 +18,7 @@ forPlot <- outDTF %>%
 
 viridisThreeColor <- c("#fde725", "#21918c", "#440154")
 
-pdf(paste0("./demo/fig2a.pdf"), width = 10, height = 5)
+pdf(paste0("./demo/output/fig2a.pdf"), width = 10, height = 5)
 forPlot %>%
   ggplot(aes(daysFromPeak, meanEffect, col = poppyCat))+
   geom_point()+
@@ -64,7 +64,7 @@ forPlot <- outDTF %>%
 
 viridisThreeColor <- c("#fde725", "#21918c", "#440154")
 
-pdf(paste0("./demo/fig2b.pdf"), width = 10, height = 5)
+pdf(paste0("./demo/output/fig2b.pdf"), width = 10, height = 5)
 forPlot %>%
   ggplot(aes(daysFromPeak, meanEffect, col = poppyCat))+
   geom_point()+
@@ -193,7 +193,7 @@ plot2 <- outDTFM4 %>%
   ) +
   guides(fill = guide_legend(override.aes = list(alpha = 1))) 
 
-pdf(paste0("./demo/fig2c.pdf"), width = 8, height = 7)
+pdf(paste0("./demo/output/fig2c.pdf"), width = 8, height = 7)
 gridExtra::grid.arrange(plot1, plot2, nrow = 2)
 dev.off()
 
@@ -242,7 +242,7 @@ plot1 <- plotDTF %>%
     x = "",
   ) 
 
-pdf(paste0("./demo/fig2d.pdf"), width = 6.5, height = 1.5)
+pdf(paste0("./demo/output/fig2d.pdf"), width = 6.5, height = 1.5)
 gridExtra::grid.arrange(plot1, nrow = 1)
 dev.off()
 

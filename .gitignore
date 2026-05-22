@@ -1,2 +1,6 @@
 .ipynb_checkpoints
 __pycache__
+.DS_Store
+.Rapp.history
+Rplots.pdf
+code/demo/output/*.pdf
