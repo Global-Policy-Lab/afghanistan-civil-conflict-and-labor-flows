@@ -24,4 +24,6 @@ plot1 <- tmp %>%
                rename(Casualties = best), 
              aes(x = as.Date(date_start), y = -.01, size = Casualties)) 
 
+pdf("./demo/output/fig1c.pdf", width = 10, height = 4)
 gridExtra::grid.arrange(plot1, nrow = 1)
+dev.off()
