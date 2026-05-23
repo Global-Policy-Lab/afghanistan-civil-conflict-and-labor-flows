@@ -86,3 +86,50 @@ All table scripts use 120-obs subsets of the district-year regression panel. Res
 | `tableS3.rds` | Sample data | 120-obs subset for Table S3 return migration |
 | `tableS5.rds` | Sample data | 120-obs subset for Tables S5 and S6 |
 | `figS1.Rdata` – `figS13.Rdata` | Pre-computed output | Full-data model results for each supplementary figure |
+
+---
+
+## Provenance: how demo files are built from the estimation pipeline
+
+The table below maps each demo data file to the estimation pipeline output(s) it was constructed from. Files marked **[TO FILL IN]** were not traceable from the estimation scripts alone — the construction code is likely in a separate (undocumented) data-preparation script.
+
+Columns:
+- **Demo file** — file in `demo/data/`
+- **Source config.R variable(s)** — variables in `code/estimation/config.R` whose files were used as inputs
+- **Producing script(s)** — estimation script(s) that write those config.R files
+- **Derivation** — what was done to the estimation output to produce the demo file
+
+| Demo file | Source config.R variable(s) | Producing script(s) | Derivation |
+|---|---|---|---|
+| `6-5-23distYearsIncluded_2020.rds` | `DIST_YEARS_RDS` | `1d_makeRegPanel.R` | Direct copy — filename is unchanged |
+| `6-5-23violenceDest_2020.rds` | `VIOLENCE_DEST_RDS` | `1d_makeRegPanel.R` | Direct copy — filename is unchanged |
+| `1-12-24fig4a.rds` | `FIG4A_DATA_RDS` | `2d_fig4.R` | Direct copy — filename is unchanged |
+| `covariates.rds` | `COVARIATES_RDS` | `1a_covariates.R` | Same data as pipeline output; geometry column dropped |
+| `eradication_2014-2016.csv` | `ERADICATION_CSV` | — (public UNODC data) | Direct copy of public input; no transformation |
+| `fig2aDemo.rds` | `RESULTS_INMIG_RDS` | `1d_makeRegPanel.R` | Random 10,000-row sample (district-day event-study estimates, k=30) |
+| `fig2bDemo.rds` | *(out-migration results, not in config.R — see commented-out save at `1d_makeRegPanel.R:155`)* | `1d_makeRegPanel.R` | Random 10,000-row sample of district-day out-migration event-study estimates |
+| `fig2cDemo.rds` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `1a_covariates.R` | Random sample of district-year outcomes joined to covariates; contains `baseline` and `poppyCat` |
+| `fig2dDemo.rds` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `1a_covariates.R` | Random 120-row sample of district-year regression panel |
+| `fig3Demo.rds` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `1a_covariates.R` | Random 400-row sample of district-year regression panel (also used by `fig5.R`) |
+| `fig4bcDemo_high.rds` | `SUBGROUP_H*_BASE` files, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; source districts with high poppy cultivation |
+| `fig4bcDemo_low.rds` | `SUBGROUP_L*_BASE` files, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; source districts with low poppy cultivation |
+| `fig4cDemo_HVT.rds` | `SUBGROUP_HVT_BASE`, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; sources: high cultivation, violent, Taliban |
+| `fig4cDemo_H_V_NonT.rds` | `SUBGROUP_HVNONT_BASE`, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; sources: high cultivation, violent, non-Taliban |
+| `fig4cDemo_H_NonV_T.rds` | `SUBGROUP_HNONVT_BASE`, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; sources: high cultivation, non-violent, Taliban |
+| `fig4cDemo_H_NonV_NonT.rds` | `SUBGROUP_HNONVNONT_BASE`, `COVARIATES_RDS` | `1e_stratified.R`, `1a_covariates.R` | 280-row sample; sources: high cultivation, non-violent, non-Taliban |
+| `tableS1.rds` | `INMIG_OUTCOME_RDS`, `OUTCOME_K15_RDS`, `OUTCOME_K45_RDS`, `OUTCOME_1_45_RDS`, `OUTCOME_1_45_14D_RDS`, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `4a_robustness_checks.R`, `4b_outcomes_alt_windows.R`, `1a_covariates.R` | 120-row sample; all robustness-check outcomes joined to covariates |
+| `tableS2.Rdata` | `OUTCOME_MINUS14_RDS`, `OUTCOME_PLUS14_RDS`, `COVARIATES_RDS` | reviewer-round-1 scripts, `1a_covariates.R` | 120-row sample; timing-shift outcomes (±14 days) joined to covariates |
+| `tableS3.rds` | `OUTCOME_STAYS_RDS` or `OUTCOME_GOBACK_RDS`, `COVARIATES_RDS` | `4b_outcomes_alt_windows.R`, `1a_covariates.R` | 120-row sample; return migration / stays outcomes joined to covariates |
+| `tableS5.rds` | `INMIG_OUTCOME_RDS`, `VIOLENCE_DEST_RDS`, `SUBGROUP_HVT_BASE` and related, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `1e_stratified.R`, `1a_covariates.R` | 120-row sample; all outcomes joined (used for Tables S5 and S6) |
+| `fig1c.RData` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `tmp` (migration time series) and `relevantRows` (NDVI peak dates) for district 2407; no estimation script writes this file |
+| `figS1.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `afghanShape` with `poppyCat` and `notGovt` columns |
+| `figS2.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `afghanShape` and `plotDTF` (harvest date tile grid) |
+| `figS4.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS5.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS6.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS7.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS8.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS9.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS10.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS12.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `figS13.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
