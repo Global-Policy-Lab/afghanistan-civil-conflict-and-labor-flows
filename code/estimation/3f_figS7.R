@@ -1,3 +1,10 @@
+# 3f_figS7.R
+# Figure S7: robustness check — leave-one-year-out estimates. Replicates
+# the Figure 3b regression omitting each harvest year in turn to verify
+# results are not driven by any single year.
+# Inputs:  INMIG_OUTCOME_RDS, COVARIATES_RDS, VIOLENCE_DEST_RDS
+# Outputs: 1-10-24fig3b_robust.pdf (in OUT_GENERAL)
+
 rm(list = ls()); gc()
 source("config.R")
 outcome1 <- readRDS(INMIG_OUTCOME_RDS)

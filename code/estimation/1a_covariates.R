@@ -1,3 +1,8 @@
+# 1a_covariates.R
+# Builds the district-year covariates panel used throughout the analysis.
+# Inputs:  DISTRICT_IDS, POPPY_CSV, AG_HECTARES_RDS, AFG_SHAPE_DATA, AGR_PIXELS, SIGAR_CSV
+# Outputs: COVARIATES_RDS
+
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
 source("config.R")

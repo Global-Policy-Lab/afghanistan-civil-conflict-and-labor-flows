@@ -1,4 +1,13 @@
 
+# 1c_makeDailyPanel.R
+# Aggregates raw k=30 CDR impact-day files into daily district-level in- and
+# out-migration panels. In-migration: visits arriving in a district from outside
+# relative to the number of people present that day. Out-migration: people who
+# left a district relative to those present 30 days earlier.
+# Inputs:  CDR_K30_DIR (raw CSVs), BEST_DATES_SAT
+# Outputs: K30_INMIG_RDS, K30_IMPACTED_RDS, DD_OUTCOMES_RDS,
+#          K30_OUTMIG_RDS, DD_OUTCOMES_OUT_RDS
+
 rm(list=ls()); gc()
 library(dplyr); library(ggplot2)
 source("config.R")

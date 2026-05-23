@@ -1,3 +1,9 @@
+# 5a_figS12.R
+# Figure S12: robustness check using an alternative violence measure based on
+# road-network conflict events rather than the main ACLED-based measure.
+# Inputs:  INMIG_OUTCOME_RDS, COVARIATES_RDS, VIOLENCE_DEST_RDS, VIOLENCE_ROAD_CSV
+# Outputs: 10-24-23fig3b_alt.pdf (in OUT_GENERAL)
+
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 library(tidyr)

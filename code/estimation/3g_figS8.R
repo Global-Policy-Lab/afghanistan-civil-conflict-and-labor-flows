@@ -1,4 +1,8 @@
-# Fig S7
+# 3g_figS8.R
+# Figure S8: robustness check — pre/post-2017 split and additional specification
+# checks for the Figure 3b conflict-migration relationship.
+# Inputs:  INMIG_OUTCOME_RDS, COVARIATES_RDS, VIOLENCE_DEST_RDS
+# Outputs: 1-10-24fig3b_post2017.pdf, 1-10-24fig3b_robust2.pdf (in OUT_GENERAL)
 ########################### 3b ###########################
 rm(list = ls()); gc()
 source("config.R")

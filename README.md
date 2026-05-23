@@ -15,6 +15,19 @@ However, all the code required to process the data and produce the results are i
 - `home_location_detector`: helper code (code for the `migration_detector` package (Chi et al. 2020))
 - `estimation`: code to create the analysis data set and produce all results
 
+# Full estimation pipeline
+
+Users with access to the full CDR and satellite datasets can run the complete estimation pipeline in `code/estimation/`. Before running any script, edit the four root path variables at the top of `code/estimation/config.R` to match your environment:
+
+```r
+WORK_ROOT <- "/path/to/your/working/directory"
+CDR_ROOT  <- "/path/to/cdr/data"
+SAT_ROOT  <- "/path/to/satellite/data"
+TMP_ROOT  <- "/path/to/scratch/directory"
+```
+
+All scripts call `source("config.R")` and derive every other path from these four variables. See `code/estimation/README.md` for the full execution order and a description of each script's inputs and outputs.
+
 # Demo
 The `demo` folder is a self-contained folder that users can run to produce all the figures and tables in the paper. Sample data sets are provided where original data cannot be released, and are indicated as such in the code.
 

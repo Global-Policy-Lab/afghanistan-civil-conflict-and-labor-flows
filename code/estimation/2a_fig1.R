@@ -1,4 +1,6 @@
-# FIGURE 1c
+# 2a_fig1.R
+# Figure 1: district-level daily migration time series for an example high-poppy
+# district (Maywand, distID 2407) illustrating the harvest-season in-migration spike.
 rm(list = ls()); gc()
 source("config.R")
 

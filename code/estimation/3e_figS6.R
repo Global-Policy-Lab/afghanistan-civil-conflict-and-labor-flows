@@ -1,3 +1,9 @@
+# 3e_figS6.R
+# Figure S6: main results stratified by year, replicating the Figure 3 scatter
+# separately for each harvest year to assess temporal stability.
+# Inputs:  INMIG_OUTCOME_RDS, COVARIATES_RDS, VIOLENCE_DEST_RDS
+# Outputs: 1-10-24figA2.pdf (in OUT_GENERAL)
+
 rm(list = ls()); gc()
 source("config.R")
 outcome1 <- readRDS(INMIG_OUTCOME_RDS)
