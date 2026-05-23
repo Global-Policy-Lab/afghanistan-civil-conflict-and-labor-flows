@@ -44,32 +44,58 @@ Output PDFs are written to `code/demo/output/`.
 
 ## R packages
 
-The demo scripts require the following R packages:
+The table below lists all R packages used across the demo scripts and the full estimation pipeline.
 
-| Package | Purpose |
-|---|---|
-| `dplyr` | Data manipulation |
-| `ggplot2` | Figures |
-| `gridExtra` | Multi-panel figure layout |
-| `scales` | Axis formatting |
-| `tidyr` | Data reshaping |
-| `lmtest` | Clustered standard errors |
-| `sandwich` | Variance-covariance matrices |
-| `stargazer` | Regression tables |
-| `sf` | Spatial data (supplementary figures) |
-| `viridis` | Color palettes (supplementary figures) |
-| `colorspace` | Color palettes (supplementary figures) |
-| `knitr` | Table formatting (supplementary figures) |
+| Package | Used in | Purpose |
+|---|---|---|
+| `dplyr` | Demo + estimation | Data manipulation |
+| `ggplot2` | Demo + estimation | Figures |
+| `gridExtra` | Demo + estimation | Multi-panel figure layout |
+| `scales` | Demo + estimation | Axis formatting |
+| `tidyr` | Demo + estimation | Data reshaping |
+| `lmtest` | Demo + estimation | Clustered standard errors |
+| `sandwich` | Demo + estimation | Variance-covariance matrices |
+| `stargazer` | Demo + estimation | Regression tables |
+| `sf` | Demo + estimation | Spatial data |
+| `viridis` | Demo + estimation | Color palettes |
+| `colorspace` | Demo + estimation | Color palettes |
+| `knitr` | Demo + estimation | Table formatting |
+| `lubridate` | Estimation only | Date arithmetic |
 
 Install all packages at once:
 
 ```r
 install.packages(c("dplyr", "ggplot2", "gridExtra", "scales", "tidyr",
                    "lmtest", "sandwich", "stargazer", "sf", "viridis",
-                   "colorspace", "knitr"))
+                   "colorspace", "knitr", "lubridate"))
+```
+
+## Python packages
+
+The MODIS–Landsat validation notebook (`code/estimation/modis-landsat-comparisons.ipynb`) requires Python 3 and a Google Earth Engine account. Install the required packages with:
+
+```bash
+pip install earthengine-api geopandas numpy pandas rasterio rioxarray shapely
+```
+
+| Package | Purpose |
+|---|---|
+| `earthengine-api` | Google Earth Engine Python API (`ee`) |
+| `geopandas` | Spatial dataframes |
+| `numpy` | Array operations |
+| `pandas` | Tabular data |
+| `rasterio` | GeoTIFF I/O and raster merging |
+| `rioxarray` | Raster I/O via xarray (`rxr`) |
+| `shapely` | Geometry objects (`Point`) |
+
+After installing `earthengine-api`, authenticate once with:
+
+```bash
+earthengine authenticate
 ```
 
 ## Software and hardware
 
 - R version 4.0 or higher (tested on R 4.5)
+- Python 3.8 or higher (for the MODIS–Landsat notebook only)
 - No non-standard hardware required
