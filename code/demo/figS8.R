@@ -1,5 +1,11 @@
 rm(list = ls()); gc()
 
+## for file ./demo/data/figS8.Rdata
+# from code 3g_figS8.R
+# run pre version to get outDTF, save data frame as outDTFpre
+# run post version to get outDTF, save data frame as outDTFpost
+# figS8.Rdata has outDTFpre and outDTFpost
+
 load("./demo/data/figS8.Rdata")
 
 plot1 <- outDTFpre %>%

@@ -2,6 +2,10 @@
 rm(list = ls()); gc()
 library(ggplot2); library(gridExtra); library(dplyr)
 
+# for file ./demo/data/fig1c.RData:
+# from code 2a_fig1.R
+# save(tmp, relevantRows, conflictDist, file = "./demo/data/fig1c.RData")
+
 load("./demo/data/fig1c.RData")
 
 plot1 <- tmp %>%

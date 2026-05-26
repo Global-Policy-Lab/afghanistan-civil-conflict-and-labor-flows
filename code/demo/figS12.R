@@ -1,6 +1,10 @@
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
 
+# for file ./demo/data/figS12.Rdata
+# see code 5a_figS12.R
+# save outDTF_joint as figS12.Rdata
+
 load("./demo/data/figS12.Rdata")
 
 

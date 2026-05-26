@@ -1,6 +1,18 @@
 rm(list = ls()); gc()
 library(ggplot2); library(dplyr)
 
+# for file "./demo/data/figS13.Rdata"
+# see code 6a_figS13.R
+# then select the relevant columns as follows
+
+# out <- out %>%
+#   select(district_id, origin_district, diff)
+# destinationLabels <- destinationLabels %>%
+#   select(breaks, finalLabel)
+# sourceLabels <- sourceLabels %>%
+#   select(breaks, finalLabel)
+# save(out, destinationLabels, sourceLabels, file = "./demo/data/figS13.Rdata")
+
 load("./demo/data/figS13.Rdata")
 
 out %>%

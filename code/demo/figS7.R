@@ -1,5 +1,9 @@
 rm(list = ls()); gc()
 
+# for file ./demo/data/figS7.Rdata
+# from code 3f_figS7.R
+# save(outDTF, file = "./demo/data/figS7.Rdata")
+
 load("./demo/data/figS7.Rdata")
 
 plot1 <- outDTF %>%

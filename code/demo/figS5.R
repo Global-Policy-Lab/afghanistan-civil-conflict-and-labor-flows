@@ -1,5 +1,26 @@
 rm(list = ls()); gc()
 
+## for file ./demo/data/figS5.Rdata
+### from code 3d_figS5.R
+# outcome1 <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23inMigRegOutcome_2020.rds")
+# covariates <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/3-13-23covariates.rds") %>%
+#   dplyr::select(-geometry)# this version should have poppyCat, talibanCurrent and inaccessibleCurrent
+# 
+# newViolence <- readRDS("/home/xtai/climate/3-8-23migrationCleanCode/output/6-5-23violenceDest_2020.rds")
+# 
+# outDTFM4 <- covariates %>%
+#   left_join(outcome1, by = c("distid", "year")) %>%
+#   mutate(prov = floor(distid/100)) %>%
+#   left_join(newViolence %>%
+#               mutate(violence_monthBefore = ifelse(numEvents_monthBeforePeak > 0, 1, 0)) #%>%
+#             ,
+#             by = c("distid", "year")) %>%
+#   filter(!is.na(maxIn))
+# 
+# outDTFM4 <- outDTFM4 %>%
+#   select(notGovt, violence_monthBefore)
+# save(outDTFM4, file = "./demo/data/figS5.Rdata")
+
 load("./demo/data/figS5.Rdata")
 
 plot1 <- ggplot(outDTFM4, aes(x = notGovt, fill = as.factor(violence_monthBefore))) +

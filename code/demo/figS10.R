@@ -1,5 +1,10 @@
 rm(list = ls()); gc()
 
+# for file ./demo/data/figS10.Rdata
+# see code 3i_figS10.R
+# save outDTF for each year dropped as outDTF_2014 to outDTF_2020
+# figS10.Rdata has outDTF_2014-2016, 2018-2020.
+
 load("./demo/data/figS10.Rdata")
 # replace outDTF_2014 with relevant year  
 plot1 <- outDTF_2014 %>%

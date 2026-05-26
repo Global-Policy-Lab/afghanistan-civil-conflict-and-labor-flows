@@ -2,9 +2,14 @@
 rm(list = ls()); gc()
 library(dplyr); library(ggplot2)
  
+## file ./demo/data/figS9.Rdata
+# see code 3h_figS9
+# run v1 to get outDTF, save data frame as outDTFv1
+# run v2 to get outDTF, save data frame as outDTFv2
+# run v3 to get outDTF, save data frame as outDTFv3
 
 load("./demo/data/figS9.Rdata")
-# this will load outDTFv1, outDTFv2, outDTFv3 for the three panels. Replace outDTFv1 in lines 9 and 48 for the second and third panel. 
+# this will load outDTFv1, outDTFv2, outDTFv3 for the three panels. Replace outDTFv1 with v2 and v3 in lines 14 and 53 to produce the second and third panels. 
 
 plot4 <- outDTFv1 %>%
   mutate(label = paste0(4:1, label)) %>%

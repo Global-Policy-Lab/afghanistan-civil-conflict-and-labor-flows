@@ -1,6 +1,10 @@
 library(dplyr); library(ggplot2)
 rm(list = ls()); gc()
 
+# for file ./demo/data/figS4.Rdata:
+# from code 3c_figS4.R
+# save(collectCoefs, originalCoef, file = "./demo/data/figS4.Rdata")
+
 load("./demo/data/figS4.Rdata")
 
 plot1 <- data.frame(randomCoefs = collectCoefs) %>%

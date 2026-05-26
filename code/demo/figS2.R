@@ -1,4 +1,8 @@
 rm(list = ls()); gc()
+# for file ./demo/data/figS2.RData:
+# from code 3b_figS2.R
+# save(plotDTF, afghanShape, file = "./demo/data/figS2.Rdata")
+
 load("./demo/data/figS2.Rdata")
 
 afghanShape %>%
