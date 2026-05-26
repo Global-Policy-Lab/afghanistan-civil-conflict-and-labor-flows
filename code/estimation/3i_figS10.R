@@ -114,7 +114,10 @@ removeYearCheck <- function(tmpYear) {
     outDTF[i, "estimate"] <- tmp["poppyCatH", "Estimate"]
     outDTF[i, "CIlow"] <- tmp["poppyCatH", "Estimate"] - qnorm(.975)*tmp["poppyCatH", "Std. Error"]
     outDTF[i, "CIhigh"] <- tmp["poppyCatH", "Estimate"] + qnorm(.975)*tmp["poppyCatH", "Std. Error"]
+    outDTF[i, "variance"] <- (tmp["poppyCatH", "Std. Error"])^2
+    outDTF[i, "n"] <- nobs(tmp)
   }
+  outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
   
   plot1 <- outDTF %>%
     mutate(label = paste0(c(1, 3, 2, 4), label)) %>%

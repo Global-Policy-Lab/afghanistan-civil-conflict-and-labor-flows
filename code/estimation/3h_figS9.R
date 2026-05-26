@@ -81,6 +81,8 @@ for (i in 1:4) {
   outDTF[i, "CIhigh"] <- tmp$ciHigh
   outDTF[i, "variance"] <- tmp$variance
 }
+outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
+outDTF$n <- nobs(new3) 
 
 
 plot1 <- outDTF %>%
@@ -181,6 +183,8 @@ tmpFun <- function(tmpTitle) {
     outDTF[i, "CIhigh"] <- tmp$ciHigh
     outDTF[i, "variance"] <- tmp$variance
   }
+  outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
+  outDTF$n <- nobs(new3) 
   
   # different definitions of violence: more than two events --- need to change x-axis limits
   plot4 <- outDTF %>%

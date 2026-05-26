@@ -114,6 +114,8 @@ for (i in 1:8) {
   outDTF_joint[i, "CIhigh"] <- tmp$ciHigh
   outDTF_joint[i, "variance"] <- tmp$variance
 }
+outDTF_joint$p <- 2*pnorm(abs(outDTF_joint$estimate)/sqrt(outDTF_joint$variance), lower.tail = FALSE)
+outDTF_joint$n <- nobs(new3a)
 
 tmpTest <- getCI(myVec = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1), estimates = estimates, vCov = clusteredVcov)
 # $estimate -0.03459132

@@ -78,8 +78,10 @@ for (i in 1:4) {
   outDTF[i, "estimate"] <- tmp$estimate
   outDTF[i, "CIlow"] <- tmp$ciLow
   outDTF[i, "CIhigh"] <- tmp$ciHigh
+  outDTF[i, "variance"] <- tmp$variance
 }
-
+outDTF$p <- 2*pnorm(abs(outDTF$estimate)/sqrt(outDTF$variance), lower.tail = FALSE)
+outDTF$n <- nobs(new3) 
 
 plot1 <- outDTF %>%
   mutate(label = paste0(4:1, label)) %>%
