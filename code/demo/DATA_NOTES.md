@@ -29,12 +29,13 @@ The demo folder uses three types of data files:
 
 ## Supplementary figures
 
-All supplementary figure scripts load pre-computed `.Rdata` files saved from the full dataset. Results match the paper exactly.
+Most supplementary figure scripts load pre-computed `.Rdata` files saved from the full dataset. Results match the paper exactly. `figS3.ipynb` is an exception — it is a Python notebook that fetches MODIS and Landsat 8 imagery directly from Google Earth Engine and runs the validation itself; it requires a GEE account and internet access.
 
 | Script | Output | Data file |
 |---|---|---|
 | `figS1.R` | `figS1.pdf` | `figS1.Rdata` |
 | `figS2.R` | `figS2.pdf` | `figS2.Rdata` |
+| `figS3.ipynb` | `landsat_modis_top10.csv` | Google Earth Engine (MODIS MOD13Q1, Landsat COMPOSITES/C02/T1_L2_8DAY_NDVI, Copernicus land cover 100m), `AFG_DIST_SHP_CLEAN`, `AFG_GRID_SHP` |
 | `figS4.R` | `figS4.pdf` | `figS4.Rdata` |
 | `figS5.R` | `figS5.pdf` | `figS5.Rdata` |
 | `figS6.R` | `figS6.pdf` | `figS6.Rdata` |

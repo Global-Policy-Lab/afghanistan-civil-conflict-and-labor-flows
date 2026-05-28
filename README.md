@@ -72,7 +72,7 @@ install.packages(c("dplyr", "ggplot2", "gridExtra", "scales", "tidyr",
 
 ## Python packages
 
-The MODIS–Landsat validation notebook (`code/estimation/modis-landsat-comparisons.ipynb`) requires Python 3 and a Google Earth Engine account. Install the required packages with:
+The MODIS–Landsat validation notebook (`code/demo/figS3.ipynb`) requires Python 3 and a Google Earth Engine account. Install the required packages with:
 
 ```bash
 pip install earthengine-api geopandas numpy pandas rasterio rioxarray shapely
