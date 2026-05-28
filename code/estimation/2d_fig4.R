@@ -2,7 +2,7 @@
 # Figure 4: source-district subgroup analysis. Compares excess harvest
 # in-migration across source districts classified by poppy cultivation level,
 # conflict exposure, and Taliban presence (H×V×T breakdown).
-# Inputs:  BEST_DATES_SAT, DD_OUTCOMES_VIOLENCE_RDS, DD_OUTCOMES_CHECKS_RDS,
+# Inputs:  BEST_DATES_SAT, DD_OUTCOMES_VIOLENCE_RDS, DD_OUTCOMES_CHECK_RDS,
 #          SUBGROUP_HVT_BASE/HVNONT/HNONVT/HNONVNONT (+ suffix), COVARIATES_RDS,
 #          FIG4A_DATA_RDS, SOURCE_HL_RDS, SOURCE_H_RDS
 # Outputs: 1-12-24fig4a.pdf, 1-9-24fig4b.pdf, 1-9-24fig4c.pdf (in OUT_GENERAL)
@@ -21,7 +21,7 @@ bestDatesLongTmp <- readRDS(BEST_DATES_SAT) %>%
 
 ddOutcomes <- readRDS(DD_OUTCOMES_VIOLENCE_RDS)
 
-ddOutcomes2 <- readRDS(DD_OUTCOMES_CHECKS_RDS) # add propLow column from here 
+ddOutcomes2 <- readRDS(DD_OUTCOMES_CHECK_RDS) # add propLow column from here 
 ddOutcomes$propLow <- ddOutcomes2$propLow
 
 myFun <- function(varName) {

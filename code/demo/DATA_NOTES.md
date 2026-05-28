@@ -121,15 +121,15 @@ Columns:
 | `tableS2.Rdata` | `OUTCOME_MINUS14_RDS`, `OUTCOME_PLUS14_RDS`, `COVARIATES_RDS` | reviewer-round-1 scripts, `1a_covariates.R` | 120-row sample; timing-shift outcomes (±14 days) joined to covariates |
 | `tableS3.rds` | `OUTCOME_STAYS_RDS` or `OUTCOME_GOBACK_RDS`, `COVARIATES_RDS` | `4b_outcomes_alt_windows.R`, `1a_covariates.R` | 120-row sample; return migration / stays outcomes joined to covariates |
 | `tableS5.rds` | `INMIG_OUTCOME_RDS`, `VIOLENCE_DEST_RDS`, `SUBGROUP_HVT_BASE` and related, `COVARIATES_RDS` | `1d_makeRegPanel.R`, `1e_stratified.R`, `1a_covariates.R` | 120-row sample; all outcomes joined (used for Tables S5 and S6) |
-| `fig1c.RData` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `tmp` (migration time series) and `relevantRows` (NDVI peak dates) for district 2407; no estimation script writes this file |
-| `figS1.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `afghanShape` with `poppyCat` and `notGovt` columns |
-| `figS2.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | Contains `afghanShape` and `plotDTF` (harvest date tile grid) |
-| `figS4.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS5.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS6.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS7.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS8.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS9.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS10.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS12.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
-| `figS13.Rdata` | **[TO FILL IN]** | **[TO FILL IN]** | |
+| `fig1c.RData` | `BEST_DATES_SAT`, `K30_INMIG_RDS`, `K30_IMPACTED_RDS`, `K30_OUTMIG_RDS`, `DISTRICT_IDS`, `POPPY_CSV`, `CONFLICT_CSV` | `2a_fig1.R` | Saves `tmp` (daily in/out-migration time series for district 2407), `relevantRows` (NDVI peak dates), and `conflictDist` (ACLED conflict events for that district) |
+| `figS1.Rdata` | `COVARIATES_RDS` (+ external `afghanShapeAllInfo.Rdata`, not in config.R) | ad hoc data prep (not a numbered estimation script) | Loads district GIS shapefile, joins `poppyCat` and `notGovt` from 2018 covariates, retains geometry + those two columns |
+| `figS2.Rdata` | `BEST_DATES_SAT`, `INMIG_OUTCOME_RDS`, `COVARIATES_RDS` | `3b_figS2.R` | Saves `plotDTF` (harvest date tile-grid data) and `afghanShape` (district shapefile with geometry) |
+| `figS4.Rdata` | `RANDOM_DIR`, `COVARIATES_RDS`, `INMIG_OUTCOME_RDS` | `randomizationInference.R` (generates files in `RANDOM_DIR`); `3c_figS4.R` (assembles) | Saves `collectCoefs` (randomization-inference coefficient distribution) and `originalCoef` (observed estimate) |
+| `figS5.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS` | `3d_figS5.R` | District-year panel joined from those three sources; retains `notGovt` and `violence_monthBefore` columns |
+| `figS6.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS` | `3e_figS6.R` | Same join as figS5; retains `tmpPoppy`, `maxIn`, `violence_monthBefore`, `notGovt` |
+| `figS7.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS` | `3f_figS7.R` | Saves `outDTF` (coefficient estimates and CIs from the trimmed-poppy regression, same structure as Fig 3b) |
+| `figS8.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS` | `3g_figS8.R` | Run with pre-2017 and post-2017 subsets; saves `outDTFpre` and `outDTFpost` |
+| `figS9.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS` | `3h_figS9.R` | Run with three specification variants; saves `outDTFv1`, `outDTFv2`, `outDTFv3` |
+| `figS10.Rdata` | `SUBGROUP_HVT_BASE`, `SUBGROUP_HVNONT_BASE`, `SUBGROUP_HNONVT_BASE`, `SUBGROUP_HNONVNONT_BASE`, `COVARIATES_RDS` | `3i_figS10.R` | Run dropping each harvest year in turn; saves `outDTF_2014` through `outDTF_2020` (2017 excluded) |
+| `figS12.Rdata` | `INMIG_OUTCOME_RDS`, `COVARIATES_RDS`, `VIOLENCE_DEST_RDS`, `VIOLENCE_ROAD_CSV` | `5a_figS12.R` | Saves `outDTF_joint` (point-range results using alternative road-network violence measure) |
+| `figS13.Rdata` | `BEST_DATES_SAT`, `CDR_K30_DIR`, `OD_RAW_RDS`, `DD_OUTCOMES_VIOLENCE_RDS`, `OD_OUT_RDS`, `COVARIATES_RDS`, `DISTRICT_IDS` | `6a_figS13.R` | Saves `out` (columns: `district_id`, `origin_district`, `diff`), `destinationLabels`, and `sourceLabels` |

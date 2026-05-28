@@ -1,7 +1,7 @@
 # 3f_figS7.R
-# Figure S7: robustness check — leave-one-year-out estimates. Replicates
-# the Figure 3b regression omitting each harvest year in turn to verify
-# results are not driven by any single year.
+# Figure S7: robustness check — trimming large poppy cultivation values. Replicates
+# the Figure 3b regression excluding districts where poppy cultivation exceeds
+# 5,000 to verify results are not driven by outliers in poppy cultivation.
 # Inputs:  INMIG_OUTCOME_RDS, COVARIATES_RDS, VIOLENCE_DEST_RDS
 # Outputs: 1-10-24fig3b_robust.pdf (in OUT_GENERAL)
 

@@ -84,8 +84,7 @@ COVARIATES_RDS <- file.path(OUT_DIR, "3-13-23covariates.rds")
 # Daily CDR panels (1c → 1d, 4a, 4b, randomizationInference)
 DD_OUTCOMES_RDS         <- file.path(OUT_DIR, "6-5-23ddOutcomes_2020.rds")
 DD_OUTCOMES_VIOLENCE_RDS <- file.path(OUT_DIR, "6-5-23ddOutcomes_violence_HNL_T_2020.rds")
-DD_OUTCOMES_CHECK_RDS   <- file.path(OUT_DIR, "7-31-23ddOutcomes_2020_check.rds")  # without trailing 's'
-DD_OUTCOMES_CHECKS_RDS  <- file.path(OUT_DIR, "7-31-23ddOutcomes_2020_checks.rds") # with trailing 's' — different file
+DD_OUTCOMES_CHECK_RDS   <- file.path(OUT_DIR, "7-31-23ddOutcomes_2020_check.rds")
 DD_OUTCOMES_GOBACK_RDS  <- file.path(OUT_DIR, "1-23-24ddOutcomes_goes_back_90.rds")
 DD_OUTCOMES_K15_RDS     <- file.path(OUT_DIR, "11-14-24ddOutcomes_2020_k15.rds")
 DD_OUTCOMES_K45_RDS     <- file.path(OUT_DIR, "11-14-24ddOutcomes_2020_k45.rds")
